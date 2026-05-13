@@ -1,37 +1,225 @@
+{% comment %}
+  TGPCOP Pharma - Advanced Collection Template
+{% endcomment %}
+
+{{ 'theme.css' | asset_url | stylesheet_tag }}
+
+{%- paginate collection.products by 12 -%}
+<section class="collection-page" id="MainCollection-{{ section.id }}" data-section="{{ section.id }}">
+  
+  <!-- Collection Header -->
+  <header class="collection-hero {% if collection.image %}has-image{% endif %}">
+    {%- if collection.image -%}
+      <div class="collection-hero-image" style="background-image: url('{{ collection.image | image_url: width: 1400 }}');"></div>
+      <div class="collection-hero-overlay"></div>
+    {%- endif -%}
+    
+    <div class="container collection-hero-inner">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">Home</a>
+        <span class="sep">/</span>
+        <span class="current">{{ collection.title }}</span>
+      </nav>
+
+      <div class="collection-hero-content">
+        <h1 class="collection-title">{{ collection.title }}</h1>
+        {%- if collection.description != blank -%}
+          <div class="collection-desc rte">{{ collection.description }}</div>
+        {%- endif -%}
+        <div class="collection-count">Showing {{ collection.products_count }} premium materials</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="collection-layout">
+      
+      <!-- Toolbar: Sorting & Filtering (Desktop) -->
+      <div class="collection-toolbar">
+        <div class="toolbar-left">
+          <div class="filter-group">
+            <span class="filter-label">Filter by:</span>
+            <div class="filter-tags">
+              <a href="{{ collection.url }}" class="filter-tag {% unless current_tags %}active{% endunless %}">All</a>
+              {%- for tag in collection.all_tags -%}
+                {%- if tag contains 'Semester' or tag contains 'GPAT' or tag contains 'Pharmacy' -%}
+                  <a href="{{ collection.url }}/{{ tag | handle }}" class="filter-tag {% if current_tags contains tag %}active{% endif %}">{{ tag }}</a>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+
+        <div class="toolbar-right">
+          <div class="sort-wrap">
+            <label for="SortBy">Sort by:</label>
+            <select name="sort_by" id="SortBy" class="sort-select" onchange="location.href = '{{ collection.url }}?sort_by=' + this.value">
+              <option value="manual" {% if collection.sort_by == 'manual' %}selected{% endif %}>Featured</option>
+              <option value="best-selling" {% if collection.sort_by == 'best-selling' %}selected{% endif %}>Best Selling</option>
+              <option value="title-ascending" {% if collection.sort_by == 'title-ascending' %}selected{% endif %}>Alphabetically, A-Z</option>
+              <option value="price-ascending" {% if collection.sort_by == 'price-ascending' %}selected{% endif %}>Price, low to high</option>
+              <option value="price-descending" {% if collection.sort_by == 'price-descending' %}selected{% endif %}>Price, high to low</option>
+              <option value="created-descending" {% if collection.sort_by == 'created-descending' %}selected{% endif %}>Date, new to old</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="collection-grid" id="ProductGridContainer">
+        {%- for product in collection.products -%}
+          <div class="grid-item">
+            {% render 'product-card', product: product %}
+          </div>
+        {%- else -%}
+          <div class="collection-empty text-center">
+            <div class="empty-icon">📂</div>
+            <h3>No Materials Found</h3>
+            <p>We couldn't find any study materials matching your current filters.</p>
+            <a href="{{ collection.url }}" class="btn btn-primary">Clear all filters</a>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <!-- Pagination -->
+      {%- if paginate.pages > 1 -%}
+        <nav class="pagination" role="navigation">
+          <ul class="pagination-list">
+            {%- if paginate.previous -%}
+              <li><a href="{{ paginate.previous.url }}" class="pagination-link">← Previous</a></li>
+            {%- endif -%}
+
+            {%- for part in paginate.parts -%}
+              <li>
+                {%- if part.is_link -%}
+                  <a href="{{ part.url }}" class="pagination-link">{{ part.title }}</a>
+                {%- else -%}
+                  <span class="pagination-link {% if part.title == paginate.current_page %}active{% endif %}">{{ part.title }}</span>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+
+            {%- if paginate.next -%}
+              <li><a href="{{ paginate.next.url }}" class="pagination-link">Next →</a></li>
+            {%- endif -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+
+    </div><!-- /.collection-layout -->
+  </div><!-- /.container -->
+</section>
+{%- endpaginate -%}
+
 <style>
-  .collection-template {
-    padding: 4rem 1rem;
-    max-width: 1200px;
-    margin: 0 auto;
+  .collection-page { background: #fff; padding-bottom: 80px; }
+  
+  /* Hero */
+  .collection-hero { 
+    background: var(--color-secondary); 
+    color: white; 
+    padding: 60px 0 80px; 
+    position: relative; 
+    overflow: hidden; 
+    margin-bottom: 40px;
   }
-  .collection__title {
-    font-size: 3rem;
-    color: var(--color-text-main);
-    text-align: center;
-    margin-bottom: 2rem;
+  .collection-hero.has-image { padding: 100px 0 120px; }
+  .collection-hero-image { 
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+    background-size: cover; background-position: center; 
+    opacity: 0.3; filter: blur(4px);
   }
-  .collection__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
+  .collection-hero-overlay { 
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+    background: linear-gradient(to bottom, rgba(11, 28, 44, 0.8), var(--color-secondary)); 
+  }
+  .collection-hero-inner { position: relative; z-index: 2; }
+  
+  .breadcrumb { font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+  .breadcrumb a { color: white; }
+  .breadcrumb .sep { opacity: 0.4; }
+  .breadcrumb .current { color: var(--color-primary); font-weight: 600; }
+
+  .collection-title { font-size: 3rem; margin-bottom: 15px; color: white; }
+  .collection-desc { font-size: 1.1rem; color: rgba(255,255,255,0.8); max-width: 700px; line-height: 1.6; margin-bottom: 20px; }
+  .collection-count { font-size: 0.9rem; font-weight: 600; color: var(--color-primary); background: rgba(34, 197, 94, 0.1); display: inline-block; padding: 4px 12px; border-radius: 20px; }
+
+  /* Toolbar */
+  .collection-toolbar { 
+    display: flex; justify-content: space-between; align-items: center; 
+    padding: 20px 0; border-bottom: 1px solid var(--color-border); 
+    margin-bottom: 40px; flex-wrap: wrap; gap: 20px;
+  }
+  .filter-group { display: flex; align-items: center; gap: 15px; }
+  .filter-label { font-weight: 700; font-size: 0.9rem; color: var(--color-heading); }
+  .filter-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filter-tag { 
+    padding: 6px 14px; background: var(--color-bg); 
+    border: 1px solid var(--color-border); 
+    border-radius: 20px; font-size: 0.85rem; 
+    font-weight: 500; color: var(--color-text);
+    transition: var(--transition);
+  }
+  .filter-tag:hover, .filter-tag.active { 
+    background: var(--color-primary); border-color: var(--color-primary); color: white; 
+  }
+
+  .sort-wrap { display: flex; align-items: center; gap: 10px; }
+  .sort-wrap label { font-size: 0.9rem; font-weight: 600; color: var(--color-heading); }
+  .sort-select { 
+    padding: 8px 15px; border: 1px solid var(--color-border); 
+    border-radius: var(--radius-sm); background: white; 
+    font-size: 0.9rem; outline: none; cursor: pointer;
+  }
+
+  /* Grid */
+  .collection-grid { 
+    display: grid; 
+    grid-template-columns: repeat(1, 1fr); 
+    gap: 30px; 
+  }
+  @media (min-width: 576px) { .collection-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 992px) { .collection-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 1200px) { .collection-grid { grid-template-columns: repeat(4, 1fr); } }
+
+  .collection-empty { padding: 80px 0; grid-column: 1 / -1; }
+  .empty-icon { font-size: 4rem; margin-bottom: 20px; }
+
+  /* Pagination */
+  .pagination { margin-top: 60px; display: flex; justify-content: center; }
+  .pagination-list { display: flex; gap: 10px; }
+  .pagination-link { 
+    width: 40px; height: 40px; 
+    display: flex; align-items: center; justify-content: center; 
+    border: 1px solid var(--color-border); border-radius: var(--radius-sm); 
+    color: var(--color-text); font-weight: 600; transition: var(--transition);
+  }
+  .pagination-link:hover, .pagination-link.active { 
+    background: var(--color-secondary); color: white; border-color: var(--color-secondary); 
+  }
+  .pagination-list li:first-child .pagination-link,
+  .pagination-list li:last-child .pagination-link { width: auto; padding: 0 20px; }
+
+  @media (max-width: 767px) {
+    .collection-title { font-size: 2rem; }
+    .collection-toolbar { flex-direction: column; align-items: flex-start; }
   }
 </style>
-
-<div class="collection-template">
-  <h1 class="collection__title">{{ collection.title }}</h1>
-  
-  <div class="collection__grid">
-    {%- for product in collection.products -%}
-      {% render 'product-card', product: product %}
-    {%- else -%}
-      <p style="color: var(--color-text-muted); text-align: center; grid-column: 1 / -1;">No products found in this collection.</p>
-    {%- endfor -%}
-  </div>
-</div>
 
 {% schema %}
 {
   "name": "Collection Layout",
-  "settings": []
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 24,
+      "step": 4,
+      "label": "Products per page",
+      "default": 12
+    }
+  ]
 }
 {% endschema %}
+
