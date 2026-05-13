@@ -14,6 +14,45 @@
     },
     "trust-badges": {
       "type": "trust-badges",
+      "blocks": {
+        "badge-1": {
+          "type": "badge",
+          "settings": {
+            "icon": "🎓",
+            "target_number": 5000,
+            "suffix": "+",
+            "label": "Students Enrolled"
+          }
+        },
+        "badge-2": {
+          "type": "badge",
+          "settings": {
+            "icon": "📚",
+            "target_number": 1200,
+            "suffix": "+",
+            "label": "Study Notes"
+          }
+        },
+        "badge-3": {
+          "type": "badge",
+          "settings": {
+            "icon": "📥",
+            "target_number": 50000,
+            "suffix": "+",
+            "label": "PDF Downloads"
+          }
+        },
+        "badge-4": {
+          "type": "badge",
+          "settings": {
+            "icon": "⭐",
+            "target_number": 98,
+            "suffix": "%",
+            "label": "Student Satisfaction"
+          }
+        }
+      },
+      "block_order": ["badge-1", "badge-2", "badge-3", "badge-4"],
       "settings": {}
     },
     "study-series": {
@@ -30,10 +69,109 @@
     },
     "why-tgpcop": {
       "type": "why-tgpcop",
+      "blocks": {
+        "feature-1": {
+          "type": "feature",
+          "settings": {
+            "icon": "🎓",
+            "title": "Expert-Curated Content",
+            "description": "All notes created by B.Pharm & M.Pharm toppers, aligned with PCI syllabus and exam patterns.",
+            "stat_value": "50+",
+            "stat_label": "Expert Contributors"
+          }
+        },
+        "feature-2": {
+          "type": "feature",
+          "settings": {
+            "icon": "⚡",
+            "title": "Instant Digital Access",
+            "description": "Download immediately after purchase. No waiting, no shipping. Study anytime on any device.",
+            "stat_value": "<2 min",
+            "stat_label": "Delivery Time"
+          }
+        },
+        "feature-3": {
+          "type": "feature",
+          "settings": {
+            "icon": "📊",
+            "title": "Infographic-Style Notes",
+            "description": "Visual learning with flowcharts, tables, mind maps & illustrated diagrams that stick in memory.",
+            "stat_value": "70%",
+            "stat_label": "Better Retention"
+          }
+        },
+        "feature-4": {
+          "type": "feature",
+          "settings": {
+            "icon": "🎯",
+            "title": "GPAT-Focused Preparation",
+            "description": "Dedicated GPAT modules with PYQs from 2010–2024, topic-wise analysis and high-yield areas marked.",
+            "stat_value": "2000+",
+            "stat_label": "GPAT MCQs"
+          }
+        },
+        "feature-5": {
+          "type": "feature",
+          "settings": {
+            "icon": "💰",
+            "title": "Affordable Pricing",
+            "description": "Premium quality at student-friendly prices. Most notes under ₹299. Free resources always available.",
+            "stat_value": "₹99",
+            "stat_label": "Starting Price"
+          }
+        },
+        "feature-6": {
+          "type": "feature",
+          "settings": {
+            "icon": "🔄",
+            "title": "Regular Updates",
+            "description": "Content updated with latest exam patterns, new research and syllabus changes. Lifetime access included.",
+            "stat_value": "♾️",
+            "stat_label": "Lifetime Updates"
+          }
+        }
+      },
+      "block_order": ["feature-1", "feature-2", "feature-3", "feature-4", "feature-5", "feature-6"],
       "settings": {}
     },
     "testimonials": {
       "type": "testimonials",
+      "blocks": {
+        "testimonial-1": {
+          "type": "testimonial",
+          "settings": {
+            "stars": "★★★★★",
+            "text": "TGPCOP PHARMA notes are an absolute game-changer! The Pharmacology notes with color-coded diagrams helped me visualize drug mechanisms perfectly. Scored 87% in my Sem 5 exams thanks to these materials.",
+            "author": "Priya Sharma",
+            "college": "AIIMS BHU, B.Pharm Final Year",
+            "product": "📚 Pharmacology Complete Notes",
+            "verified": true
+          }
+        },
+        "testimonial-2": {
+          "type": "testimonial",
+          "settings": {
+            "stars": "★★★★★",
+            "text": "Finally found notes that actually explain pharmaceutical chemistry in simple language. The synthesis route diagrams are crystal clear.",
+            "author": "Rahul Verma",
+            "college": "JSS College of Pharmacy, Mysore",
+            "product": "⚗️ Pharm Chemistry Notes",
+            "verified": true
+          }
+        },
+        "testimonial-3": {
+          "type": "testimonial",
+          "settings": {
+            "stars": "★★★★★",
+            "text": "The 90-day GPAT study plan is brilliant! I followed it strictly and improved my mock test score from 55% to 78% in just 2 months.",
+            "author": "Ananya Mishra",
+            "college": "NIPER, GPAT 2024 Qualifier",
+            "product": "🎯 GPAT Complete Pack",
+            "verified": true
+          }
+        }
+      },
+      "block_order": ["testimonial-1", "testimonial-2", "testimonial-3"],
       "settings": {}
     }
   },
