@@ -1,5 +1,5 @@
 <style>
-  .template-404 {
+  .page-404-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -7,7 +7,7 @@
     text-align: center;
     padding: 2rem;
   }
-  .template-404__content {
+  .page-404-container__content {
     background: var(--color-secondary);
     padding: 4rem 2rem;
     border-radius: var(--radius-lg);
@@ -16,28 +16,28 @@
     max-width: 600px;
     width: 100%;
   }
-  .template-404__title {
+  .page-404-container__title {
     font-size: 6rem;
     font-weight: 800;
     color: var(--color-accent);
     margin-bottom: 1rem;
     line-height: 1;
   }
-  .template-404__sub {
+  .page-404-container__sub {
     font-size: 1.5rem;
     color: var(--color-text-main);
     margin-bottom: 2rem;
   }
-  .template-404__text {
+  .page-404-container__text {
     color: var(--color-text-muted);
     margin-bottom: 2rem;
   }
-  .template-404__search form {
+  .page-404-container__search form {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 2rem;
   }
-  .template-404__search input[type="search"] {
+  .page-404-container__search input[type="search"] {
     flex: 1;
     padding: 0.75rem 1rem;
     border-radius: var(--radius-sm);
@@ -45,25 +45,25 @@
     background: rgba(0, 0, 0, 0.2);
     color: white;
   }
-  .template-404__search button {
+  .page-404-container__search button {
     padding: 0.75rem 1.5rem;
   }
 </style>
 
-<div class="template-404">
-  <div class="template-404__content">
-    <h1 class="template-404__title">404</h1>
-    <h2 class="template-404__sub">{{ 'general.404.title' | t | default: 'Page Not Found' }}</h2>
-    <p class="template-404__text">{{ 'general.404.subtext' | t | default: 'The page you were looking for does not exist. Maybe you want to try searching instead?' }}</p>
+<div class="page-404-container">
+  <div class="page-404-container__content">
+    <h1 class="page-404-container__title">404</h1>
+    <h2 class="page-404-container__sub">Page Not Found</h2>
+    <p class="page-404-container__text">The page you were looking for does not exist. Maybe you want to try searching instead?</p>
     
-    <div class="template-404__search">
+    <div class="page-404-container__search">
       <form action="{{ routes.search_url }}" method="get" role="search">
         <input type="search" name="q" placeholder="Search for notes, subjects..." value="{{ search.terms | escape }}">
-        <button type="submit" class="btn btn--primary">Search</button>
+        <button type="submit" class="btn btn-primary">Search</button>
       </form>
     </div>
 
-    <a href="{{ routes.root_url }}" class="btn btn--secondary">Back to Homepage</a>
+    <a href="{{ routes.root_url }}" class="btn btn-outline">Back to Homepage</a>
   </div>
 </div>
 
