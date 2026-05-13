@@ -19,31 +19,28 @@
       <!-- Badge -->
       <div class="hero-badge animate-fade-up">
         <span class="badge-dot"></span>
-        India's #1 Pharmacy Education Platform
+        {{ section.settings.badge_text | default: "India's #1 Pharmacy Education Platform" }}
       </div>
 
       <!-- Main Heading -->
       <h1 class="hero-heading animate-fade-up" style="animation-delay: 0.1s;">
-        Your Ultimate
-        <span class="hero-heading-highlight">Pharmacy</span>
-        <span class="hero-heading-block">Study Hub</span>
+        {{ section.settings.heading | default: "Your Ultimate Pharmacy Study Hub" }}
       </h1>
 
       <!-- Subheading -->
       <p class="hero-subheading animate-fade-up" style="animation-delay: 0.2s;">
-        Notes, MCQs, PYQs, GPAT Preparation &amp; Nursing Resources — Everything you need to
-        <strong>ace your pharmacy exams.</strong>
+        {{ section.settings.subheading | default: "Notes, MCQs, PYQs, GPAT Preparation & Nursing Resources — Everything you need to ace your exams." }}
       </p>
 
       <!-- CTA Buttons -->
       <div class="hero-cta-group animate-fade-up" style="animation-delay: 0.3s;">
-        <a href="{{ routes.collections_url }}" class="btn btn-primary btn-lg" id="HeroCTAPrimary">
+        <a href="{{ section.settings.primary_cta_link | default: routes.collections_url }}" class="btn btn-primary btn-lg" id="HeroCTAPrimary">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-          Access Notes
+          {{ section.settings.primary_cta_text | default: "Access Notes" }}
         </a>
-        <a href="/pages/free-pdfs" class="btn btn-outline btn-lg" id="HeroCTASecondary">
+        <a href="{{ section.settings.secondary_cta_link | default: '/pages/free-pdfs' }}" class="btn btn-outline btn-lg" id="HeroCTASecondary">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download Free PDFs
+          {{ section.settings.secondary_cta_text | default: "Download Free PDFs" }}
         </a>
       </div>
 
@@ -133,9 +130,15 @@
   "settings": [
     {
       "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "India's #1 Pharmacy Education Platform"
+    },
+    {
+      "type": "html",
       "id": "heading",
       "label": "Main Heading",
-      "default": "Your Ultimate Pharmacy Study Hub"
+      "default": "Your Ultimate <span class=\"hero-heading-highlight\">Pharmacy</span> <span class=\"hero-heading-block\">Study Hub</span>"
     },
     {
       "type": "textarea",

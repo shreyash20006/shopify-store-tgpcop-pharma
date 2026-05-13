@@ -1,0 +1,132 @@
+<!-- ===== HEADER ===== -->
+<header class="site-header" id="SiteHeader" role="banner">
+  <div class="container header-inner">
+
+    <!-- Logo -->
+    <a href="{{ routes.root_url }}" class="site-logo" aria-label="{{ shop.name }} - Home">
+      {% if section.settings.logo != blank %}
+        <img src="{{ section.settings.logo | img_url: '200x60' }}" alt="{{ shop.name }}" width="{{ section.settings.logo_width }}" height="auto" loading="eager" style="max-width: {{ section.settings.logo_width }}px;">
+      {% else %}
+        <div class="logo-text">
+          <span class="logo-tgpcop">TGPCOP</span>
+          <span class="logo-pharma">PHARMA</span>
+        </div>
+      {% endif %}
+    </a>
+
+    <!-- Desktop Navigation -->
+    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+      <ul class="nav-list">
+        {%- for link in linklists[section.settings.menu].links -%}
+          <li class="nav-item {% if link.links != blank %}has-dropdown{% endif %}">
+            <a href="{{ link.url }}" class="nav-link">{{ link.title }} {% if link.links != blank %}<span class="nav-arrow">▾</span>{% endif %}</a>
+            
+            {%- if link.links != blank -%}
+              <ul class="nav-dropdown">
+                {%- for childlink in link.links -%}
+                  <li><a href="{{ childlink.url }}" class="dropdown-link">{{ childlink.title }}</a></li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <a href="{{ routes.search_url }}" class="header-icon" aria-label="Search">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </a>
+      {% if shop.customer_accounts_enabled %}
+        {% if customer %}
+          <a href="{{ routes.account_url }}" class="header-icon" aria-label="Account">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </a>
+        {% else %}
+          <a href="{{ routes.account_login_url }}" class="header-icon" aria-label="Login">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </a>
+        {% endif %}
+      {% endif %}
+      <a href="{{ routes.cart_url }}" class="header-icon cart-icon" aria-label="Cart ({{ cart.item_count }} items)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        {% if cart.item_count > 0 %}
+          <span class="cart-badge">{{ cart.item_count }}</span>
+        {% endif %}
+      </a>
+      <!-- Mobile Menu Toggle -->
+      <button class="mobile-toggle" id="MobileMenuToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span class="hamburger-box">
+          <span class="hamburger-inner"></span>
+        </span>
+      </button>
+    </div><!-- /.header-actions -->
+
+  </div><!-- /.header-inner -->
+</header>
+
+<!-- ===== MOBILE MENU ===== -->
+<div class="mobile-menu" id="MobileMenu" aria-hidden="true">
+  <div class="mobile-menu-inner">
+    
+    <div class="mobile-menu-header">
+      <span class="mobile-menu-title">Menu</span>
+      <button class="mobile-close" id="MobileMenuClose" aria-label="Close menu">✕</button>
+    </div>
+
+    <ul class="mobile-nav-list">
+      {%- for link in linklists[section.settings.menu].links -%}
+        <li class="mobile-nav-item">
+          <a href="{{ link.url }}" class="mobile-nav-link">{{ link.title }}</a>
+          {%- if link.links != blank -%}
+            <ul class="mobile-subnav-list">
+              {%- for childlink in link.links -%}
+                <li><a href="{{ childlink.url }}" class="mobile-subnav-link">{{ childlink.title }}</a></li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    <div class="mobile-menu-footer">
+      {% if shop.customer_accounts_enabled %}
+        <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" class="btn btn-outline mobile-auth-btn">
+          {% if customer %}My Account{% else %}Login / Register{% endif %}
+        </a>
+      {% endif %}
+    </div>
+
+  </div>
+  <div class="mobile-menu-overlay" id="MobileMenuOverlay"></div>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 250,
+      "step": 10,
+      "default": 160,
+      "unit": "px",
+      "label": "Custom logo width"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Menu"
+    }
+  ]
+}
+{% endschema %}
