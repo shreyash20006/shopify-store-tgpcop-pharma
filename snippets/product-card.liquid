@@ -1,0 +1,140 @@
+{% comment %}
+  Product Card Snippet
+  Reusable educational note card
+  Usage: {% render 'product-card', product: product %}
+{% endcomment %}
+
+<article class="product-card" itemscope itemtype="https://schema.org/Product">
+  <a href="{{ product.url }}" class="product-card-link" aria-label="{{ product.title }} — ₹{{ product.price | money_without_currency }}">
+
+    <!-- Product Image -->
+    <div class="product-card-image-wrap">
+      {% if product.featured_image != blank %}
+        <img
+          src="{{ product.featured_image | img_url: '400x300', crop: 'center' }}"
+          alt="{{ product.featured_image.alt | default: product.title | escape }}"
+          class="product-card-image"
+          width="400"
+          height="300"
+          loading="lazy"
+          itemprop="image"
+        >
+      {% else %}
+        <div class="product-card-image-placeholder">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <span>Study Notes</span>
+        </div>
+      {% endif %}
+
+      <!-- Badge -->
+      {% if product.compare_at_price > product.price %}
+        <div class="product-badge product-badge-sale">
+          {{ product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price }}% OFF
+        </div>
+      {% elsif product.tags contains 'free' or product.tags contains 'Free' %}
+        <div class="product-badge product-badge-free">FREE</div>
+      {% elsif product.tags contains 'new' or product.tags contains 'New' %}
+        <div class="product-badge product-badge-new">NEW</div>
+      {% endif %}
+
+      <!-- Hover Overlay -->
+      <div class="product-card-overlay">
+        <span class="product-overlay-text">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Quick View
+        </span>
+      </div>
+
+    </div><!-- /.product-card-image-wrap -->
+
+    <!-- Product Info -->
+    <div class="product-card-body">
+
+      <!-- Meta tags -->
+      <div class="product-card-meta">
+        {% for tag in product.tags %}
+          {% if tag contains 'Semester' or tag contains 'semester' or tag contains 'Sem' %}
+            <span class="product-meta-tag meta-semester">{{ tag }}</span>
+          {% endif %}
+          {% if tag contains 'Subject:' %}
+            <span class="product-meta-tag meta-subject">{{ tag | remove: 'Subject:' | strip }}</span>
+          {% endif %}
+        {% endfor %}
+        {% if product.tags contains 'GPAT' %}
+          <span class="product-meta-tag meta-gpat">🎯 GPAT</span>
+        {% endif %}
+      </div>
+
+      <!-- Title -->
+      <h3 class="product-card-title" itemprop="name">{{ product.title }}</h3>
+
+      <!-- Short description -->
+      {% if product.metafields.custom.subject_desc != blank %}
+        <p class="product-card-desc">{{ product.metafields.custom.subject_desc }}</p>
+      {% elsif product.description != blank %}
+        <p class="product-card-desc">{{ product.description | strip_html | truncate: 80 }}</p>
+      {% endif %}
+
+      <!-- Features quick list -->
+      <ul class="product-card-features">
+        {% if product.metafields.custom.pages_count != blank %}
+          <li>📄 {{ product.metafields.custom.pages_count }} Pages</li>
+        {% endif %}
+        {% if product.metafields.custom.mcq_count != blank %}
+          <li>✅ {{ product.metafields.custom.mcq_count }} MCQs</li>
+        {% endif %}
+        <li>📱 Mobile Friendly PDF</li>
+        <li>♾️ Lifetime Access</li>
+      </ul>
+
+      <!-- Rating -->
+      <div class="product-card-rating" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
+        <div class="rating-stars">
+          <span class="star filled">★</span>
+          <span class="star filled">★</span>
+          <span class="star filled">★</span>
+          <span class="star filled">★</span>
+          <span class="star half">★</span>
+        </div>
+        <span class="rating-score" itemprop="ratingValue">4.8</span>
+        <span class="rating-count">(<span itemprop="reviewCount">{{ product.metafields.reviews.rating_count | default: '120' }}</span>)</span>
+      </div>
+
+      <!-- Price -->
+      <div class="product-card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+        <meta itemprop="priceCurrency" content="INR">
+        {% if product.price == 0 %}
+          <span class="price-current price-free">FREE</span>
+        {% else %}
+          <span class="price-current" itemprop="price" content="{{ product.price | money_without_currency }}">
+            ₹{{ product.price | money_without_currency }}
+          </span>
+          {% if product.compare_at_price > product.price %}
+            <span class="price-original">₹{{ product.compare_at_price | money_without_currency }}</span>
+          {% endif %}
+        {% endif %}
+      </div>
+
+    </div><!-- /.product-card-body -->
+
+    <!-- Add to Cart / Download -->
+    <div class="product-card-footer">
+      {% if product.price == 0 %}
+        <a href="{{ product.url }}" class="btn btn-primary btn-sm btn-full" id="card-{{ product.id }}-download">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Free
+        </a>
+      {% else %}
+        <form method="post" action="{{ routes.cart_add_url }}" class="product-card-form">
+          <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+          <input type="hidden" name="quantity" value="1">
+          <button type="submit" class="btn btn-primary btn-sm btn-full" id="card-{{ product.id }}-add">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+            Add to Cart — ₹{{ product.price | money_without_currency }}
+          </button>
+        </form>
+      {% endif %}
+    </div><!-- /.product-card-footer -->
+
+  </a>
+</article>

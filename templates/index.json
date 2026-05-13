@@ -1,0 +1,48 @@
+{
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "message": "🎓 India's #1 Pharmacy Education Platform | Free GPAT Study Material Available | Download Now!",
+        "link": "/pages/free-pdfs",
+        "link_text": "Download Free"
+      }
+    },
+    "hero-banner": {
+      "type": "hero-banner",
+      "settings": {}
+    },
+    "trust-badges": {
+      "type": "trust-badges",
+      "settings": {}
+    },
+    "study-series": {
+      "type": "study-series",
+      "settings": {}
+    },
+    "product-grid": {
+      "type": "product-grid",
+      "settings": {
+        "heading": "📚 Featured Study Materials",
+        "collection": "",
+        "products_to_show": 8
+      }
+    },
+    "why-tgpcop": {
+      "type": "why-tgpcop",
+      "settings": {}
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero-banner",
+    "trust-badges",
+    "study-series",
+    "product-grid",
+    "why-tgpcop",
+    "testimonials"
+  ]
+}

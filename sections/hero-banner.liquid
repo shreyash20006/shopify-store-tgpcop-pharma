@@ -1,0 +1,175 @@
+{% comment %}
+  Hero Banner Section
+  Full-width educational hero with animated elements
+{% endcomment %}
+
+<section class="hero-section" id="HeroBanner" aria-label="Hero Banner">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-particles">
+    <div class="particle particle-1"></div>
+    <div class="particle particle-2"></div>
+    <div class="particle particle-3"></div>
+    <div class="particle particle-4"></div>
+    <div class="particle particle-5"></div>
+  </div>
+
+  <div class="container hero-inner">
+    <div class="hero-content">
+
+      <!-- Badge -->
+      <div class="hero-badge animate-fade-up">
+        <span class="badge-dot"></span>
+        India's #1 Pharmacy Education Platform
+      </div>
+
+      <!-- Main Heading -->
+      <h1 class="hero-heading animate-fade-up" style="animation-delay: 0.1s;">
+        Your Ultimate
+        <span class="hero-heading-highlight">Pharmacy</span>
+        <span class="hero-heading-block">Study Hub</span>
+      </h1>
+
+      <!-- Subheading -->
+      <p class="hero-subheading animate-fade-up" style="animation-delay: 0.2s;">
+        Notes, MCQs, PYQs, GPAT Preparation &amp; Nursing Resources — Everything you need to
+        <strong>ace your pharmacy exams.</strong>
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="hero-cta-group animate-fade-up" style="animation-delay: 0.3s;">
+        <a href="{{ routes.collections_url }}" class="btn btn-primary btn-lg" id="HeroCTAPrimary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          Access Notes
+        </a>
+        <a href="/pages/free-pdfs" class="btn btn-outline btn-lg" id="HeroCTASecondary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Free PDFs
+        </a>
+      </div>
+
+      <!-- Subject Tags -->
+      <div class="hero-tags animate-fade-up" style="animation-delay: 0.4s;">
+        <span class="hero-tag">💊 Pharmacology</span>
+        <span class="hero-tag">🧪 Pharmaceutics</span>
+        <span class="hero-tag">🔬 Pharmacognosy</span>
+        <span class="hero-tag">⚗️ Pharmaceutical Chemistry</span>
+        <span class="hero-tag">🎯 GPAT</span>
+        <span class="hero-tag">🏥 Nursing</span>
+      </div>
+
+    </div><!-- /.hero-content -->
+
+    <!-- Hero Visual — Study Dashboard Card -->
+    <div class="hero-visual animate-slide-in" style="animation-delay: 0.2s;" aria-hidden="true">
+      <div class="dashboard-card">
+        <div class="dashboard-header">
+          <div class="dashboard-dot red"></div>
+          <div class="dashboard-dot yellow"></div>
+          <div class="dashboard-dot green"></div>
+          <span class="dashboard-title">TGPCOP Study Dashboard</span>
+        </div>
+        <div class="dashboard-body">
+          <div class="dash-stat-row">
+            <div class="dash-stat">
+              <div class="dash-stat-icon">📚</div>
+              <div class="dash-stat-info">
+                <span class="dash-stat-num">1,200+</span>
+                <span class="dash-stat-label">Notes Available</span>
+              </div>
+              <div class="dash-stat-bar"><div class="dash-stat-fill" style="width: 85%;"></div></div>
+            </div>
+            <div class="dash-stat">
+              <div class="dash-stat-icon">✅</div>
+              <div class="dash-stat-info">
+                <span class="dash-stat-num">5,000+</span>
+                <span class="dash-stat-label">MCQs Solved</span>
+              </div>
+              <div class="dash-stat-bar"><div class="dash-stat-fill" style="width: 92%;"></div></div>
+            </div>
+          </div>
+          <div class="dash-subjects">
+            <div class="dash-subject-item active">
+              <span class="ds-icon">💊</span>
+              <span class="ds-name">Pharmacology</span>
+              <span class="ds-badge">Semester 5</span>
+            </div>
+            <div class="dash-subject-item">
+              <span class="ds-icon">🧪</span>
+              <span class="ds-name">Pharmaceutics</span>
+              <span class="ds-badge">Semester 3</span>
+            </div>
+            <div class="dash-subject-item">
+              <span class="ds-icon">🎯</span>
+              <span class="ds-name">GPAT Prep</span>
+              <span class="ds-badge">All Years</span>
+            </div>
+          </div>
+          <div class="dash-progress-section">
+            <span class="dash-progress-label">Your Study Progress</span>
+            <div class="dash-progress-bar">
+              <div class="dash-progress-fill"></div>
+            </div>
+            <span class="dash-progress-pct">68% Complete</span>
+          </div>
+        </div>
+      </div>
+    </div><!-- /.hero-visual -->
+
+  </div><!-- /.hero-inner -->
+
+  <!-- Scroll indicator -->
+  <div class="hero-scroll-indicator" aria-hidden="true">
+    <div class="scroll-mouse">
+      <div class="scroll-wheel"></div>
+    </div>
+    <span>Scroll to explore</span>
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Main Heading",
+      "default": "Your Ultimate Pharmacy Study Hub"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Notes, MCQs, PYQs, GPAT Preparation & Nursing Resources"
+    },
+    {
+      "type": "url",
+      "id": "primary_cta_link",
+      "label": "Primary Button Link"
+    },
+    {
+      "type": "text",
+      "id": "primary_cta_text",
+      "label": "Primary Button Text",
+      "default": "Access Notes"
+    },
+    {
+      "type": "url",
+      "id": "secondary_cta_link",
+      "label": "Secondary Button Link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_text",
+      "label": "Secondary Button Text",
+      "default": "Download Free PDFs"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner"
+    }
+  ]
+}
+{% endschema %}

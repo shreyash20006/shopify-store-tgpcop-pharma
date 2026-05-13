@@ -1,0 +1,56 @@
+{% comment %}
+  Announcement Bar Section
+  Sticky green bar at the top of every page
+{% endcomment %}
+
+<div class="announcement-bar" id="AnnouncementBar" role="complementary" aria-label="Announcement">
+  <div class="announcement-inner">
+    <div class="announcement-marquee">
+      <span class="announcement-text">
+        🎓 {{ section.settings.message }}
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        🚀 New GPAT 2025 Notes Added &nbsp;&nbsp;|&nbsp;&nbsp;
+        📱 Join 5000+ Pharmacy Students &nbsp;&nbsp;|&nbsp;&nbsp;
+        🎓 {{ section.settings.message }}
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        🚀 New GPAT 2025 Notes Added &nbsp;&nbsp;|&nbsp;&nbsp;
+        📱 Join 5000+ Pharmacy Students &nbsp;&nbsp;
+      </span>
+    </div>
+    {% if section.settings.link != blank %}
+      <a href="{{ section.settings.link }}" class="announcement-cta">
+        {{ section.settings.link_text | default: 'Learn More' }} →
+      </a>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "message",
+      "label": "Announcement Message",
+      "default": "India's #1 Pharmacy Education Platform | Free GPAT Study Material Available!"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link URL"
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Link Text",
+      "default": "Download Free"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement Bar"
+    }
+  ]
+}
+{% endschema %}

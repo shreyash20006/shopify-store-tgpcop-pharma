@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>
+    {% if page_title %}{{ page_title }} | {% endif %}{{ shop.name }}
+  </title>
+
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  <meta name="theme-color" content="#0B1C2C">
+  <meta property="og:site_name" content="{{ shop.name }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  <meta property="og:title" content="{{ page_title | escape }}">
+  <meta property="og:type" content="website">
+  {% if page_image %}
+    <meta property="og:image" content="{{ page_image | img_url: '1200x630' }}">
+  {% endif %}
+
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Favicon -->
+  {% if settings.favicon != blank %}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | img_url: '32x32' }}">
+  {% endif %}
+
+  <!-- Theme CSS -->
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+
+  <!-- Shopify required -->
+  {{ content_for_header }}
+</head>
+
+<body class="{% if customer %}customer-logged-in{% endif %} template-{{ template | replace: '/', '-' | handle }}">
+
+  <!-- Skip to content -->
+  <a class="skip-to-content" href="#MainContent">Skip to content</a>
+
+  <!-- ===== ANNOUNCEMENT BAR ===== -->
+  {% section 'announcement-bar' %}
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header" id="SiteHeader" role="banner">
+    <div class="container header-inner">
+
+      <!-- Logo -->
+      <a href="{{ routes.root_url }}" class="site-logo" aria-label="{{ shop.name }} - Home">
+        {% if settings.logo != blank %}
+          <img src="{{ settings.logo | img_url: '200x60' }}" alt="{{ shop.name }}" width="160" height="50" loading="eager">
+        {% else %}
+          <div class="logo-text">
+            <span class="logo-tgpcop">TGPCOP</span>
+            <span class="logo-pharma">PHARMA</span>
+          </div>
+        {% endif %}
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="site-nav" role="navigation" aria-label="Main navigation">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="{{ routes.root_url }}" class="nav-link">Home</a></li>
+          <li class="nav-item has-dropdown">
+            <a href="{{ routes.collections_url }}" class="nav-link">Study Materials <span class="nav-arrow">▾</span></a>
+            <ul class="nav-dropdown">
+              <li><a href="{{ routes.collections_url }}/notes" class="dropdown-link">📚 Notes</a></li>
+              <li><a href="{{ routes.collections_url }}/mcqs" class="dropdown-link">✅ MCQs</a></li>
+              <li><a href="{{ routes.collections_url }}/pyqs" class="dropdown-link">📋 PYQs</a></li>
+              <li><a href="{{ routes.collections_url }}/gpat" class="dropdown-link">🎯 GPAT Prep</a></li>
+              <li><a href="{{ routes.collections_url }}/nursing" class="dropdown-link">🏥 Nursing Resources</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a href="/pages/about" class="nav-link">About Us</a></li>
+          <li class="nav-item"><a href="/blogs/updates" class="nav-link">Blog</a></li>
+          <li class="nav-item"><a href="/pages/contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <a href="{{ routes.search_url }}" class="header-icon" aria-label="Search">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </a>
+        {% if shop.customer_accounts_enabled %}
+          {% if customer %}
+            <a href="{{ routes.account_url }}" class="header-icon" aria-label="Account">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </a>
+          {% else %}
+            <a href="{{ routes.account_login_url }}" class="header-icon" aria-label="Login">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </a>
+          {% endif %}
+        {% endif %}
+        <a href="{{ routes.cart_url }}" class="header-icon cart-icon" aria-label="Cart ({{ cart.item_count }} items)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          {% if cart.item_count > 0 %}
+            <span class="cart-badge">{{ cart.item_count }}</span>
+          {% endif %}
+        </a>
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="MobileMenuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="MobileMenu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+
+    </div><!-- /.header-inner -->
+  </header>
+
+  <!-- ===== MOBILE MENU ===== -->
+  <div class="mobile-menu" id="MobileMenu" aria-hidden="true">
+    <div class="mobile-menu-inner">
+      <button class="mobile-menu-close" id="MobileMenuClose" aria-label="Close menu">✕</button>
+      <div class="mobile-logo">
+        <span class="logo-tgpcop">TGPCOP</span>
+        <span class="logo-pharma">PHARMA</span>
+      </div>
+      <nav class="mobile-nav" aria-label="Mobile navigation">
+        <ul class="mobile-nav-list">
+          <li><a href="{{ routes.root_url }}" class="mobile-nav-link">🏠 Home</a></li>
+          <li><a href="{{ routes.collections_url }}" class="mobile-nav-link">📚 All Study Materials</a></li>
+          <li><a href="{{ routes.collections_url }}/notes" class="mobile-nav-link">📖 Notes</a></li>
+          <li><a href="{{ routes.collections_url }}/mcqs" class="mobile-nav-link">✅ MCQs</a></li>
+          <li><a href="{{ routes.collections_url }}/pyqs" class="mobile-nav-link">📋 PYQs</a></li>
+          <li><a href="{{ routes.collections_url }}/gpat" class="mobile-nav-link">🎯 GPAT Prep</a></li>
+          <li><a href="{{ routes.collections_url }}/nursing" class="mobile-nav-link">🏥 Nursing Resources</a></li>
+          <li><a href="/pages/about" class="mobile-nav-link">ℹ️ About Us</a></li>
+          <li><a href="/pages/contact" class="mobile-nav-link">📞 Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="mobile-menu-overlay" id="MobileMenuOverlay"></div>
+  </div>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main id="MainContent" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  {% section 'footer' %}
+
+  <!-- ===== STICKY MOBILE CTA ===== -->
+  <div class="sticky-mobile-cta" id="StickyMobileCta">
+    <a href="{{ routes.collections_url }}" class="sticky-cta-btn sticky-cta-primary">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.61 5a2 2 0 0 1 1.95-2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      Access Notes
+    </a>
+    <a href="/pages/free-pdfs" class="sticky-cta-btn sticky-cta-secondary">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Free PDFs
+    </a>
+  </div>
+
+  <!-- Theme JS -->
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+
+</body>
+</html>

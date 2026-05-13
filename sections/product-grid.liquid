@@ -1,0 +1,154 @@
+{% comment %}
+  Product Grid Section
+  Featured study materials collection
+{% endcomment %}
+
+<section class="product-grid-section" id="ProductGrid" aria-label="Featured Study Materials">
+  <div class="container">
+
+    <!-- Section Header -->
+    <div class="section-header">
+      <div class="section-header-left">
+        <div class="section-eyebrow">📦 Study Materials</div>
+        <h2 class="section-title">{{ section.settings.heading | default: '📚 Featured Study Materials' }}</h2>
+        <p class="section-desc">{{ section.settings.subheading | default: 'Premium notes and resources curated by pharmacy toppers and educators' }}</p>
+      </div>
+      <div class="section-header-right">
+        <a href="{{ routes.collections_url }}" class="btn btn-outline" id="ViewAllProducts">View All Materials →</a>
+      </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="product-filter-tabs" role="tablist" aria-label="Filter by subject">
+      <button class="filter-tab active" data-filter="all" role="tab" aria-selected="true" id="filter-all">All</button>
+      <button class="filter-tab" data-filter="pharmacology" role="tab" aria-selected="false" id="filter-pharmacology">💊 Pharmacology</button>
+      <button class="filter-tab" data-filter="pharmaceutics" role="tab" aria-selected="false" id="filter-pharmaceutics">🧪 Pharmaceutics</button>
+      <button class="filter-tab" data-filter="pharmacognosy" role="tab" aria-selected="false" id="filter-pharmacognosy">🌿 Pharmacognosy</button>
+      <button class="filter-tab" data-filter="gpat" role="tab" aria-selected="false" id="filter-gpat">🎯 GPAT</button>
+      <button class="filter-tab" data-filter="nursing" role="tab" aria-selected="false" id="filter-nursing">🏥 Nursing</button>
+    </div>
+
+    <!-- Product Grid -->
+    {% if section.settings.collection != blank %}
+      {% assign featured_collection = collections[section.settings.collection] %}
+    {% endif %}
+
+    {% if featured_collection and featured_collection.products.size > 0 %}
+      <div class="products-grid" id="ProductsGrid">
+        {% assign products_to_show = section.settings.products_to_show | default: 8 %}
+        {% for product in featured_collection.products limit: products_to_show %}
+          <div class="product-grid-item" data-tags="{{ product.tags | join: ',' | downcase }}">
+            {% render 'product-card', product: product %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <!-- Placeholder cards shown when no collection is assigned -->
+      <div class="products-grid" id="ProductsGrid">
+
+        {% assign placeholder_products = "Pharmacology Complete Notes Sem 5-6,Pharmaceutics Unit Operations PYQs,GPAT 2024 Solved Paper with Explanations,Pharmacognosy Crude Drugs Illustrated,Pharmaceutical Chemistry Synthesis Notes,Nursing Pharmacology Quick Reference,B.Pharm All Semester MCQ Bank,Clinical Pharmacy Case Studies" | split: "," %}
+        {% assign placeholder_prices = "299,199,399,249,279,199,499,349" | split: "," %}
+        {% assign placeholder_sems = "Semester 5-6,Semester 3-4,All Years,Semester 3-5,Semester 2-4,Nursing,All Sems,Sem 5-8" | split: "," %}
+        {% assign placeholder_icons = "💊,🧪,🎯,🌿,⚗️,🏥,📚,🏨" | split: "," %}
+
+        {% for title in placeholder_products %}
+          {% assign idx = forloop.index0 %}
+          <div class="product-grid-item">
+            <article class="product-card product-card-placeholder">
+              <div class="product-card-link">
+                <div class="product-card-image-wrap">
+                  <div class="product-card-image-placeholder">
+                    <span class="placeholder-icon">{{ placeholder_icons[idx] }}</span>
+                    <span>Study Notes</span>
+                  </div>
+                  {% if idx == 2 %}
+                    <div class="product-badge product-badge-sale">BESTSELLER</div>
+                  {% elsif idx == 0 %}
+                    <div class="product-badge product-badge-new">NEW</div>
+                  {% endif %}
+                </div>
+                <div class="product-card-body">
+                  <div class="product-card-meta">
+                    <span class="product-meta-tag meta-semester">{{ placeholder_sems[idx] }}</span>
+                  </div>
+                  <h3 class="product-card-title">{{ title }}</h3>
+                  <p class="product-card-desc">Comprehensive study material for pharmacy students with illustrated diagrams and solved examples.</p>
+                  <ul class="product-card-features">
+                    <li>📄 80–120 Pages</li>
+                    <li>📱 Mobile Friendly PDF</li>
+                    <li>♾️ Lifetime Access</li>
+                  </ul>
+                  <div class="product-card-rating">
+                    <div class="rating-stars">
+                      <span class="star filled">★</span><span class="star filled">★</span>
+                      <span class="star filled">★</span><span class="star filled">★</span>
+                      <span class="star half">★</span>
+                    </div>
+                    <span class="rating-score">4.8</span>
+                    <span class="rating-count">(120+)</span>
+                  </div>
+                  <div class="product-card-price">
+                    <span class="price-current">₹{{ placeholder_prices[idx] }}</span>
+                  </div>
+                </div>
+                <div class="product-card-footer">
+                  <a href="{{ routes.collections_url }}" class="btn btn-primary btn-sm btn-full">
+                    Get Now — ₹{{ placeholder_prices[idx] }}
+                  </a>
+                </div>
+              </div>
+            </article>
+          </div>
+        {% endfor %}
+
+      </div>
+    {% endif %}
+
+    <!-- Load More -->
+    <div class="load-more-wrap text-center">
+      <a href="{{ routes.collections_url }}" class="btn btn-outline btn-lg" id="LoadMoreProducts">
+        Browse All Study Materials →
+      </a>
+    </div>
+
+  </div><!-- /.container -->
+</section>
+
+{% schema %}
+{
+  "name": "Product Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "📚 Featured Study Materials"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Section Subheading",
+      "default": "Premium notes and resources curated by pharmacy toppers and educators"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Featured Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 16,
+      "step": 4,
+      "label": "Products to Show",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Grid"
+    }
+  ]
+}
+{% endschema %}
