@@ -59,115 +59,46 @@
 
     <!-- Testimonials Grid -->
     <div class="testimonials-grid" id="TestimonialsGrid">
-
-      <div class="testimonial-card featured-testimonial">
-        <div class="testimonial-quote">"</div>
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-text">
-          TGPCOP PHARMA notes are an absolute game-changer! The Pharmacology notes with color-coded diagrams helped me visualize drug mechanisms perfectly. Scored 87% in my Sem 5 exams thanks to these materials. The GPAT PYQs section is incredibly detailed with explanations for every wrong option!
-        </p>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar" aria-label="Priya Sharma">PS</div>
-          <div class="testimonial-info">
-            <strong class="testimonial-name">Priya Sharma</strong>
-            <span class="testimonial-college">AIIMS BHU, B.Pharm Final Year</span>
-            <span class="testimonial-product">📚 Pharmacology Complete Notes</span>
+      {% for block in section.blocks %}
+        <div class="testimonial-card {% if forloop.first %}featured-testimonial{% endif %}" {{ block.shopify_attributes }}>
+          <div class="testimonial-quote">"</div>
+          <div class="testimonial-stars">{{ block.settings.stars }}</div>
+          <p class="testimonial-text">{{ block.settings.text }}</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" aria-label="{{ block.settings.author }}">{{ block.settings.author | slice: 0, 2 | upcase }}</div>
+            <div class="testimonial-info">
+              <strong class="testimonial-name">{{ block.settings.author }}</strong>
+              <span class="testimonial-college">{{ block.settings.college }}</span>
+              <span class="testimonial-product">{{ block.settings.product }}</span>
+            </div>
+            {% if block.settings.verified %}
+              <div class="testimonial-verified">✓ Verified Purchase</div>
+            {% endif %}
           </div>
-          <div class="testimonial-verified">✓ Verified Purchase</div>
         </div>
-      </div>
-
-      <div class="testimonial-card">
-        <div class="testimonial-quote">"</div>
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-text">
-          Finally found notes that actually explain pharmaceutical chemistry in simple language. The synthesis route diagrams are crystal clear. Downloaded 3 subject notes and all exceeded expectations. Will definitely buy more!
-        </p>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar" aria-label="Rahul Verma">RV</div>
-          <div class="testimonial-info">
-            <strong class="testimonial-name">Rahul Verma</strong>
-            <span class="testimonial-college">JSS College of Pharmacy, Mysore</span>
-            <span class="testimonial-product">⚗️ Pharm Chemistry Notes</span>
+      {% else %}
+        <!-- Fallbacks -->
+        <div class="testimonial-card featured-testimonial">
+          <div class="testimonial-quote">"</div>
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">TGPCOP PHARMA notes are an absolute game-changer! The Pharmacology notes with color-coded diagrams helped me visualize drug mechanisms perfectly. Scored 87% in my Sem 5 exams thanks to these materials. The GPAT PYQs section is incredibly detailed with explanations for every wrong option!</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" aria-label="Priya Sharma">PS</div>
+            <div class="testimonial-info">
+              <strong class="testimonial-name">Priya Sharma</strong>
+              <span class="testimonial-college">AIIMS BHU, B.Pharm Final Year</span>
+              <span class="testimonial-product">📚 Pharmacology Complete Notes</span>
+            </div>
+            <div class="testimonial-verified">✓ Verified Purchase</div>
           </div>
-          <div class="testimonial-verified">✓ Verified Purchase</div>
         </div>
-      </div>
-
-      <div class="testimonial-card">
-        <div class="testimonial-quote">"</div>
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-text">
-          The 90-day GPAT study plan is brilliant! I followed it strictly and improved my mock test score from 55% to 78% in just 2 months. The infographic notes make revision super fast. Best investment for any GPAT aspirant!
-        </p>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar" aria-label="Ananya Mishra">AM</div>
-          <div class="testimonial-info">
-            <strong class="testimonial-name">Ananya Mishra</strong>
-            <span class="testimonial-college">NIPER, GPAT 2024 Qualifier</span>
-            <span class="testimonial-product">🎯 GPAT Complete Pack</span>
-          </div>
-          <div class="testimonial-verified">✓ Verified Purchase</div>
-        </div>
-      </div>
-
-      <div class="testimonial-card">
-        <div class="testimonial-quote">"</div>
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-text">
-          As a nursing student, the pharmacology nursing notes are perfectly tailored. Drug classifications, nursing considerations, side effects — all organized beautifully. The PDF is mobile-optimized so I study during commute. Highly recommended!
-        </p>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar" aria-label="Kavitha R">KR</div>
-          <div class="testimonial-info">
-            <strong class="testimonial-name">Kavitha R.</strong>
-            <span class="testimonial-college">Manipal College of Nursing</span>
-            <span class="testimonial-product">🏥 Nursing Pharmacology Notes</span>
-          </div>
-          <div class="testimonial-verified">✓ Verified Purchase</div>
-        </div>
-      </div>
-
-      <div class="testimonial-card">
-        <div class="testimonial-quote">"</div>
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-text">
-          Bought the Pharmaceutics PYQ bundle and completed all questions in a week. The explanations are so detailed that I didn't need any other resource. Delivery was instant and the PDF quality is top-notch. 10/10 experience!
-        </p>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar" aria-label="Arjun K">AK</div>
-          <div class="testimonial-info">
-            <strong class="testimonial-name">Arjun K.</strong>
-            <span class="testimonial-college">MAHE, B.Pharm Semester 4</span>
-            <span class="testimonial-product">🧪 Pharmaceutics PYQs</span>
-          </div>
-          <div class="testimonial-verified">✓ Verified Purchase</div>
-        </div>
-      </div>
-
-      <div class="testimonial-card">
-        <div class="testimonial-quote">"</div>
-        <div class="testimonial-stars">★★★★☆</div>
-        <p class="testimonial-text">
-          Good quality content with excellent value for money. Pharmacognosy notes have beautiful botanical illustrations. Would love even more MCQs in future updates, but overall a fantastic resource for every pharmacy student!
-        </p>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar" aria-label="Deepa S">DS</div>
-          <div class="testimonial-info">
-            <strong class="testimonial-name">Deepa S.</strong>
-            <span class="testimonial-college">SDM College of Pharmacy</span>
-            <span class="testimonial-product">🌿 Pharmacognosy Notes</span>
-          </div>
-          <div class="testimonial-verified">✓ Verified Purchase</div>
-        </div>
-      </div>
-
+      {% endfor %}
     </div><!-- /.testimonials-grid -->
 
     <!-- Testimonial CTA -->
     <div class="testimonials-cta text-center">
-      <a href="{{ routes.collections_url }}" class="btn btn-primary btn-lg" id="TestimonialCTABtn">
-        Join 5000+ Students Today →
+      <a href="{{ section.settings.cta_link | default: routes.collections_url }}" class="btn btn-primary btn-lg" id="TestimonialCTABtn">
+        {{ section.settings.cta_text | default: 'Join 5000+ Students Today →' }}
       </a>
     </div>
 
@@ -183,11 +114,71 @@
       "id": "heading",
       "label": "Section Heading",
       "default": "What Our Students Say"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button Text",
+      "default": "Join 5000+ Students Today →"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "text",
+          "id": "stars",
+          "label": "Rating (Stars)",
+          "default": "★★★★★"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Testimonial Text",
+          "default": "This product changed my studying habits completely!"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author Name",
+          "default": "John Doe"
+        },
+        {
+          "type": "text",
+          "id": "college",
+          "label": "College Info",
+          "default": "Pharmacy College"
+        },
+        {
+          "type": "text",
+          "id": "product",
+          "label": "Product Referenced",
+          "default": "📚 Pharmacology Complete Notes"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Verified Purchase Badge",
+          "default": true
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "Testimonials"
+      "name": "Testimonials",
+      "blocks": [
+        { "type": "testimonial", "settings": { "author": "Priya Sharma", "text": "TGPCOP PHARMA notes are an absolute game-changer! Scored 87% in Sem 5.", "college": "AIIMS BHU", "product": "📚 Pharmacology Complete Notes" } },
+        { "type": "testimonial", "settings": { "author": "Rahul Verma", "text": "Finally found notes that actually explain pharmaceutical chemistry in simple language.", "college": "JSS College", "product": "⚗️ Pharm Chemistry Notes" } },
+        { "type": "testimonial", "settings": { "author": "Ananya Mishra", "text": "The 90-day GPAT study plan is brilliant! Improved my mock test score from 55% to 78%.", "college": "NIPER", "product": "🎯 GPAT Complete Pack" } }
+      ]
     }
   ]
 }

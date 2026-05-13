@@ -6,49 +6,30 @@
 <section class="trust-badges-section" id="TrustBadges" aria-label="Trust statistics">
   <div class="container">
     <div class="trust-badges-grid">
-
-      <div class="trust-badge" data-count="5000">
-        <div class="trust-badge-icon">🎓</div>
-        <div class="trust-badge-content">
-          <span class="trust-badge-number counter" data-target="5000">0</span>
-          <span class="trust-badge-suffix">+</span>
-          <span class="trust-badge-label">Students Enrolled</span>
+      {% for block in section.blocks %}
+        <div class="trust-badge" data-count="{{ block.settings.target_number }}" {{ block.shopify_attributes }}>
+          <div class="trust-badge-icon">{{ block.settings.icon | default: '🎓' }}</div>
+          <div class="trust-badge-content">
+            <span class="trust-badge-number counter" data-target="{{ block.settings.target_number }}">0</span>
+            <span class="trust-badge-suffix">{{ block.settings.suffix }}</span>
+            <span class="trust-badge-label">{{ block.settings.label }}</span>
+          </div>
         </div>
-      </div>
 
-      <div class="trust-divider" aria-hidden="true"></div>
-
-      <div class="trust-badge" data-count="1200">
-        <div class="trust-badge-icon">📚</div>
-        <div class="trust-badge-content">
-          <span class="trust-badge-number counter" data-target="1200">0</span>
-          <span class="trust-badge-suffix">+</span>
-          <span class="trust-badge-label">Study Notes</span>
+        {% unless forloop.last %}
+          <div class="trust-divider" aria-hidden="true"></div>
+        {% endunless %}
+      {% else %}
+        <!-- Fallbacks if no blocks are added -->
+        <div class="trust-badge" data-count="5000">
+          <div class="trust-badge-icon">🎓</div>
+          <div class="trust-badge-content">
+            <span class="trust-badge-number counter" data-target="5000">0</span>
+            <span class="trust-badge-suffix">+</span>
+            <span class="trust-badge-label">Students Enrolled</span>
+          </div>
         </div>
-      </div>
-
-      <div class="trust-divider" aria-hidden="true"></div>
-
-      <div class="trust-badge" data-count="50000">
-        <div class="trust-badge-icon">📥</div>
-        <div class="trust-badge-content">
-          <span class="trust-badge-number counter" data-target="50000">0</span>
-          <span class="trust-badge-suffix">+</span>
-          <span class="trust-badge-label">PDF Downloads</span>
-        </div>
-      </div>
-
-      <div class="trust-divider" aria-hidden="true"></div>
-
-      <div class="trust-badge" data-count="98">
-        <div class="trust-badge-icon">⭐</div>
-        <div class="trust-badge-content">
-          <span class="trust-badge-number counter" data-target="98">0</span>
-          <span class="trust-badge-suffix">%</span>
-          <span class="trust-badge-label">Student Satisfaction</span>
-        </div>
-      </div>
-
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -57,9 +38,48 @@
 {
   "name": "Trust Badges",
   "settings": [],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Badge",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Emoji Icon",
+          "default": "🎓"
+        },
+        {
+          "type": "number",
+          "id": "target_number",
+          "label": "Number to count to",
+          "default": 5000
+        },
+        {
+          "type": "text",
+          "id": "suffix",
+          "label": "Number Suffix",
+          "default": "+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Badge Label",
+          "default": "Students Enrolled"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "Trust Badges"
+      "name": "Trust Badges",
+      "blocks": [
+        { "type": "badge", "settings": { "icon": "🎓", "target_number": 5000, "suffix": "+", "label": "Students Enrolled" } },
+        { "type": "badge", "settings": { "icon": "📚", "target_number": 1200, "suffix": "+", "label": "Study Notes" } },
+        { "type": "badge", "settings": { "icon": "📥", "target_number": 50000, "suffix": "+", "label": "PDF Downloads" } },
+        { "type": "badge", "settings": { "icon": "⭐", "target_number": 98, "suffix": "%", "label": "Student Satisfaction" } }
+      ]
     }
   ]
 }

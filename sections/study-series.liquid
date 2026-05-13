@@ -10,10 +10,10 @@
     <div class="section-header text-center">
       <div class="section-eyebrow">📅 Structured Learning</div>
       <h2 class="section-title">
-        90-Day <span class="text-highlight">Pharmacy Mastery</span> Series
+        {{ section.settings.heading | default: '90-Day <span class="text-highlight">Pharmacy Mastery</span> Series' }}
       </h2>
       <p class="section-desc">
-        Follow our battle-tested study roadmap designed by top pharmacy educators to help you crack GPAT, University Exams and more.
+        {{ section.settings.description | default: 'Follow our battle-tested study roadmap designed by top pharmacy educators to help you crack GPAT, University Exams and more.' }}
       </p>
     </div>
 

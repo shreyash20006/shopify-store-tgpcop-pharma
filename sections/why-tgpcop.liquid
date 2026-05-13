@@ -19,91 +19,32 @@
 
     <!-- Feature Cards Grid -->
     <div class="why-grid">
-
-      <div class="why-card" data-aos="fade-up" data-aos-delay="0">
-        <div class="why-card-icon">
-          <span class="why-icon-emoji">🎓</span>
+      {% for block in section.blocks %}
+        <div class="why-card" data-aos="fade-up" data-aos-delay="{{ forloop.index0 | modulo: 3 | times: 100 }}" {{ block.shopify_attributes }}>
+          <div class="why-card-icon">
+            <span class="why-icon-emoji">{{ block.settings.icon | default: '🎓' }}</span>
+          </div>
+          <h3 class="why-card-title">{{ block.settings.title }}</h3>
+          <p class="why-card-desc">{{ block.settings.description }}</p>
+          <div class="why-card-stat">
+            <span class="stat-num">{{ block.settings.stat_value }}</span>
+            <span class="stat-label">{{ block.settings.stat_label }}</span>
+          </div>
         </div>
-        <h3 class="why-card-title">Expert-Curated Content</h3>
-        <p class="why-card-desc">
-          All notes created by B.Pharm & M.Pharm toppers, aligned with PCI syllabus and exam patterns.
-        </p>
-        <div class="why-card-stat">
-          <span class="stat-num">50+</span>
-          <span class="stat-label">Expert Contributors</span>
+      {% else %}
+        <!-- Fallbacks -->
+        <div class="why-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="why-card-icon">
+            <span class="why-icon-emoji">🎓</span>
+          </div>
+          <h3 class="why-card-title">Expert-Curated Content</h3>
+          <p class="why-card-desc">All notes created by B.Pharm & M.Pharm toppers, aligned with PCI syllabus and exam patterns.</p>
+          <div class="why-card-stat">
+            <span class="stat-num">50+</span>
+            <span class="stat-label">Expert Contributors</span>
+          </div>
         </div>
-      </div>
-
-      <div class="why-card" data-aos="fade-up" data-aos-delay="100">
-        <div class="why-card-icon">
-          <span class="why-icon-emoji">⚡</span>
-        </div>
-        <h3 class="why-card-title">Instant Digital Access</h3>
-        <p class="why-card-desc">
-          Download immediately after purchase. No waiting, no shipping. Study anytime on any device.
-        </p>
-        <div class="why-card-stat">
-          <span class="stat-num">&lt;2 min</span>
-          <span class="stat-label">Delivery Time</span>
-        </div>
-      </div>
-
-      <div class="why-card" data-aos="fade-up" data-aos-delay="200">
-        <div class="why-card-icon">
-          <span class="why-icon-emoji">📊</span>
-        </div>
-        <h3 class="why-card-title">Infographic-Style Notes</h3>
-        <p class="why-card-desc">
-          Visual learning with flowcharts, tables, mind maps & illustrated diagrams that stick in memory.
-        </p>
-        <div class="why-card-stat">
-          <span class="stat-num">70%</span>
-          <span class="stat-label">Better Retention</span>
-        </div>
-      </div>
-
-      <div class="why-card" data-aos="fade-up" data-aos-delay="0">
-        <div class="why-card-icon">
-          <span class="why-icon-emoji">🎯</span>
-        </div>
-        <h3 class="why-card-title">GPAT-Focused Preparation</h3>
-        <p class="why-card-desc">
-          Dedicated GPAT modules with PYQs from 2010–2024, topic-wise analysis and high-yield areas marked.
-        </p>
-        <div class="why-card-stat">
-          <span class="stat-num">2000+</span>
-          <span class="stat-label">GPAT MCQs</span>
-        </div>
-      </div>
-
-      <div class="why-card" data-aos="fade-up" data-aos-delay="100">
-        <div class="why-card-icon">
-          <span class="why-icon-emoji">💰</span>
-        </div>
-        <h3 class="why-card-title">Affordable Pricing</h3>
-        <p class="why-card-desc">
-          Premium quality at student-friendly prices. Most notes under ₹299. Free resources always available.
-        </p>
-        <div class="why-card-stat">
-          <span class="stat-num">₹99</span>
-          <span class="stat-label">Starting Price</span>
-        </div>
-      </div>
-
-      <div class="why-card" data-aos="fade-up" data-aos-delay="200">
-        <div class="why-card-icon">
-          <span class="why-icon-emoji">🔄</span>
-        </div>
-        <h3 class="why-card-title">Regular Updates</h3>
-        <p class="why-card-desc">
-          Content updated with latest exam patterns, new research and syllabus changes. Lifetime access included.
-        </p>
-        <div class="why-card-stat">
-          <span class="stat-num">♾️</span>
-          <span class="stat-label">Lifetime Updates</span>
-        </div>
-      </div>
-
+      {% endfor %}
     </div><!-- /.why-grid -->
 
     <!-- Bottom Banner -->
@@ -115,7 +56,7 @@
           <p>From AIIMS BHU to JIPMER, students nationwide rely on TGPCOP PHARMA for their studies</p>
         </div>
       </div>
-      <a href="{{ routes.collections_url }}" class="btn btn-primary" id="WhyCTABtn">Start Learning Free →</a>
+      <a href="{{ section.settings.cta_link | default: routes.collections_url }}" class="btn btn-primary" id="WhyCTABtn">{{ section.settings.cta_text | default: 'Start Learning Free →' }}</a>
     </div>
 
   </div><!-- /.container -->
@@ -130,11 +71,69 @@
       "id": "heading",
       "label": "Section Heading",
       "default": "Why Choose TGPCOP PHARMA?"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button Text",
+      "default": "Start Learning Free →"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Card",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Emoji Icon",
+          "default": "🎓"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Expert-Curated Content"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "All notes created by B.Pharm & M.Pharm toppers, aligned with PCI syllabus and exam patterns."
+        },
+        {
+          "type": "text",
+          "id": "stat_value",
+          "label": "Stat Value",
+          "default": "50+"
+        },
+        {
+          "type": "text",
+          "id": "stat_label",
+          "label": "Stat Label",
+          "default": "Expert Contributors"
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "Why TGPCOP"
+      "name": "Why TGPCOP",
+      "blocks": [
+        { "type": "feature", "settings": { "icon": "🎓", "title": "Expert-Curated Content", "description": "All notes created by B.Pharm & M.Pharm toppers, aligned with PCI syllabus and exam patterns.", "stat_value": "50+", "stat_label": "Expert Contributors" } },
+        { "type": "feature", "settings": { "icon": "⚡", "title": "Instant Digital Access", "description": "Download immediately after purchase. No waiting, no shipping. Study anytime on any device.", "stat_value": "<2 min", "stat_label": "Delivery Time" } },
+        { "type": "feature", "settings": { "icon": "📊", "title": "Infographic-Style Notes", "description": "Visual learning with flowcharts, tables, mind maps & illustrated diagrams that stick in memory.", "stat_value": "70%", "stat_label": "Better Retention" } },
+        { "type": "feature", "settings": { "icon": "🎯", "title": "GPAT-Focused Preparation", "description": "Dedicated GPAT modules with PYQs from 2010–2024, topic-wise analysis and high-yield areas marked.", "stat_value": "2000+", "stat_label": "GPAT MCQs" } },
+        { "type": "feature", "settings": { "icon": "💰", "title": "Affordable Pricing", "description": "Premium quality at student-friendly prices. Most notes under ₹299. Free resources always available.", "stat_value": "₹99", "stat_label": "Starting Price" } },
+        { "type": "feature", "settings": { "icon": "🔄", "title": "Regular Updates", "description": "Content updated with latest exam patterns, new research and syllabus changes. Lifetime access included.", "stat_value": "♾️", "stat_label": "Lifetime Updates" } }
+      ]
     }
   ]
 }

@@ -128,12 +128,11 @@
     </div>
   </div>
 
-  <!-- Footer Bottom -->
-  <div class="footer-bottom">
+    <div class="footer-bottom">
     <div class="container">
       <div class="footer-bottom-inner">
         <p class="footer-copyright">
-          &copy; {{ 'now' | date: '%Y' }} TGPCOP PHARMA. All rights reserved. Made with ❤️ for Pharmacy Students of India.
+          &copy; {{ 'now' | date: '%Y' }} TGPCOP PHARMA. All rights reserved. {{ section.settings.copyright_text }}
         </p>
         <div class="footer-payment">
           <span class="payment-label">We Accept:</span>
@@ -155,10 +154,99 @@
   "name": "Footer",
   "settings": [
     {
-      "type": "text",
+      "type": "textarea",
       "id": "tagline",
       "label": "Brand Tagline",
-      "default": "India's #1 Pharmacy Education Platform"
+      "default": "India's #1 Pharmacy Education Platform. Empowering B.Pharm, M.Pharm and Nursing students with premium study materials since 2020."
+    },
+    {
+      "type": "text",
+      "id": "email_1",
+      "label": "Email 1",
+      "default": "contact@tgpcoppharma.shop"
+    },
+    {
+      "type": "text",
+      "id": "email_2",
+      "label": "Email 2",
+      "default": "support@tgpcoppharma.shop"
+    },
+    {
+      "type": "text",
+      "id": "email_3",
+      "label": "Email 3",
+      "default": "info@tgpcoppharma.shop"
+    },
+    {
+      "type": "url",
+      "id": "instagram",
+      "label": "Instagram Link"
+    },
+    {
+      "type": "url",
+      "id": "youtube",
+      "label": "YouTube Link"
+    },
+    {
+      "type": "url",
+      "id": "telegram",
+      "label": "Telegram Link"
+    },
+    {
+      "type": "url",
+      "id": "whatsapp",
+      "label": "WhatsApp Link"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_1",
+      "label": "First Menu"
+    },
+    {
+      "type": "text",
+      "id": "menu_1_title",
+      "label": "First Menu Title",
+      "default": "📚 Study Materials"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_2",
+      "label": "Second Menu"
+    },
+    {
+      "type": "text",
+      "id": "menu_2_title",
+      "label": "Second Menu Title",
+      "default": "🔬 Subjects"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_3",
+      "label": "Third Menu"
+    },
+    {
+      "type": "text",
+      "id": "menu_3_title",
+      "label": "Third Menu Title",
+      "default": "ℹ️ Information"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Newsletter Heading",
+      "default": "📬 Get Free Study Tips & Updates"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Newsletter Text",
+      "default": "Join 5000+ students. Get free notes, exam tips, and GPAT updates directly to your inbox."
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright Custom Text",
+      "default": "Made with ❤️ for Pharmacy Students of India."
     }
   ],
   "presets": [

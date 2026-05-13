@@ -9,12 +9,12 @@
       <span class="announcement-text">
         🎓 {{ section.settings.message }}
         &nbsp;&nbsp;|&nbsp;&nbsp;
-        🚀 New GPAT 2025 Notes Added &nbsp;&nbsp;|&nbsp;&nbsp;
-        📱 Join 5000+ Pharmacy Students &nbsp;&nbsp;|&nbsp;&nbsp;
+        🚀 {{ section.settings.message2 | default: "New GPAT 2025 Notes Added" }} &nbsp;&nbsp;|&nbsp;&nbsp;
+        📱 {{ section.settings.message3 | default: "Join 5000+ Pharmacy Students" }} &nbsp;&nbsp;|&nbsp;&nbsp;
         🎓 {{ section.settings.message }}
         &nbsp;&nbsp;|&nbsp;&nbsp;
-        🚀 New GPAT 2025 Notes Added &nbsp;&nbsp;|&nbsp;&nbsp;
-        📱 Join 5000+ Pharmacy Students &nbsp;&nbsp;
+        🚀 {{ section.settings.message2 | default: "New GPAT 2025 Notes Added" }} &nbsp;&nbsp;|&nbsp;&nbsp;
+        📱 {{ section.settings.message3 | default: "Join 5000+ Pharmacy Students" }} &nbsp;&nbsp;
       </span>
     </div>
     {% if section.settings.link != blank %}
