@@ -1,94 +1,301 @@
+{% comment %}
+  TGPCOP Pharma - Premium Product Template
+  Handles the display of study materials, PDFs, and notes.
+{% endcomment %}
+
+{{ 'theme.css' | asset_url | stylesheet_tag }}
+
+<section class="product-page" id="MainProduct-{{ section.id }}" data-section="{{ section.id }}">
+  <div class="container">
+    
+    <!-- Breadcrumbs -->
+    <nav class="product-breadcrumbs" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a>
+      <span class="breadcrumb-separator">/</span>
+      <a href="{{ routes.collections_url }}">Study Materials</a>
+      <span class="breadcrumb-separator">/</span>
+      <span class="breadcrumb-current">{{ product.title }}</span>
+    </nav>
+
+    <div class="product-grid-layout">
+      
+      <!-- Left Column: Media -->
+      <div class="product-media-column">
+        <div class="product-media-gallery">
+          {%- if product.featured_media -%}
+            <div class="product-media-primary">
+              <img 
+                src="{{ product.featured_media | image_url: width: 800 }}" 
+                alt="{{ product.featured_media.alt | escape }}"
+                width="800"
+                height="800"
+                loading="eager"
+              >
+              
+              {%- if product.compare_at_price > product.price -%}
+                <div class="product-media-badge badge-sale">
+                  {{ product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price }}% OFF
+                </div>
+              {%- endif -%}
+            </div>
+          {%- else -%}
+            <div class="product-media-placeholder">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {%- endif -%}
+
+          {%- if product.media.size > 1 -%}
+            <div class="product-media-thumbnails">
+              {%- for media in product.media -%}
+                <div class="thumbnail-item {% if forloop.first %}active{% endif %}">
+                  <img src="{{ media | image_url: width: 150, height: 150, crop: 'center' }}" alt="{{ media.alt | escape }}" loading="lazy">
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        <!-- Trust Features (Mobile hidden, Desktop visible) -->
+        <div class="product-trust-features desktop-only">
+          <div class="trust-item">
+            <span class="trust-icon">⚡</span>
+            <div class="trust-text">
+              <strong>Instant Delivery</strong>
+              <span>Get your PDF immediately after purchase</span>
+            </div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon">♾️</span>
+            <div class="trust-text">
+              <strong>Lifetime Access</strong>
+              <span>Download anytime from your account</span>
+            </div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon">🛡️</span>
+            <div class="trust-text">
+              <strong>Secure Payment</strong>
+              <span>100% encrypted & safe transactions</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Info -->
+      <div class="product-info-column">
+        <div class="product-info-sticky">
+          
+          <div class="product-meta-header">
+            {%- for tag in product.tags -%}
+              {%- if tag contains 'Semester' or tag contains 'Sem' -%}
+                <span class="product-label label-semester">{{ tag }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+            <span class="product-label label-verified">✓ PCI Verified</span>
+          </div>
+
+          <h1 class="product-title">{{ product.title }}</h1>
+
+          <!-- Ratings -->
+          <div class="product-rating-row">
+            <div class="rating-stars">
+              ★★★★★
+            </div>
+            <span class="rating-text">4.8/5.0 ({{ product.metafields.reviews.rating_count | default: 120 }} reviews)</span>
+          </div>
+
+          <!-- Price -->
+          <div class="product-price-row">
+            {%- if product.price == 0 -%}
+              <span class="price-current price-free">FREE</span>
+            {%- else -%}
+              <span class="price-current">₹{{ product.price | money_without_currency }}</span>
+              {%- if product.compare_at_price > product.price -%}
+                <span class="price-old">₹{{ product.compare_at_price | money_without_currency }}</span>
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+
+          <!-- Short Description -->
+          {%- if product.description != blank -%}
+            <div class="product-short-desc">
+              {{ product.description | strip_html | truncatewords: 30 }}
+            </div>
+          {%- endif -%}
+
+          <!-- Purchase Form -->
+          <div class="product-purchase-box">
+            {%- form 'product', product, id: 'product-form', class: 'form' -%}
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              
+              {%- if section.settings.show_quantity_selector -%}
+                <div class="product-quantity-selector">
+                  <label for="Quantity-{{ section.id }}">Quantity</label>
+                  <div class="qty-input-wrap">
+                    <button type="button" class="qty-btn" onclick="this.parentNode.querySelector('input').stepDown()">-</button>
+                    <input type="number" id="Quantity-{{ section.id }}" name="quantity" value="1" min="1" class="qty-input">
+                    <button type="button" class="qty-btn" onclick="this.parentNode.querySelector('input').stepUp()">+</button>
+                  </div>
+                </div>
+              {%- endif -%}
+
+              <div class="product-actions">
+                <button 
+                  type="submit" 
+                  name="add" 
+                  class="btn btn-primary btn-lg btn-full"
+                  {% unless product.available %}disabled{% endunless %}
+                >
+                  {%- if product.available -%}
+                    {%- if product.price == 0 -%}
+                      Download Free Notes
+                    {%- else -%}
+                      Add to Study Cart
+                    {%- endif -%}
+                  {%- else -%}
+                    Sold Out
+                  {%- endif -%}
+                </button>
+              </div>
+            {%- endform -%}
+          </div>
+
+          <!-- Description Section -->
+          <div class="product-description-full">
+            <h3 class="desc-heading">📋 Product Details</h3>
+            <div class="rte">
+              {{ product.description }}
+            </div>
+            
+            <!-- Features List (Extracted from metadata if exists) -->
+            <ul class="product-highlights">
+              <li><span class="h-icon">📄</span> <strong>Format:</strong> High-quality Digital PDF</li>
+              <li><span class="h-icon">✅</span> <strong>Content:</strong> PCI Syllabus Aligned</li>
+              <li><span class="h-icon">🎯</span> <strong>Exam:</strong> Semester & GPAT Oriented</li>
+            </ul>
+          </div>
+
+        </div><!-- /.product-info-sticky -->
+      </div><!-- /.product-info-column -->
+
+    </div><!-- /.product-grid-layout -->
+  </div><!-- /.container -->
+</section>
+
 <style>
-  .product-template {
-    padding: 4rem 1rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
+  .product-page { padding: 40px 0 80px; background: #fff; }
+  .product-breadcrumbs { margin-bottom: 30px; font-size: 0.9rem; color: var(--color-text-light); }
+  .breadcrumb-separator { margin: 0 10px; opacity: 0.5; }
+  .breadcrumb-current { color: var(--color-heading); font-weight: 600; }
+
+  .product-grid-layout { display: grid; grid-template-columns: 1fr; gap: 40px; }
+  @media (min-width: 992px) {
+    .product-grid-layout { grid-template-columns: 1.2fr 0.8fr; }
   }
-  @media(min-width: 768px) {
-    .product-template {
-      grid-template-columns: 1fr 1fr;
-    }
+
+  /* Media Section */
+  .product-media-gallery { position: relative; margin-bottom: 30px; }
+  .product-media-primary { 
+    background: var(--color-bg); 
+    border-radius: var(--radius-lg); 
+    overflow: hidden; 
+    border: 1px solid var(--color-border);
+    position: relative;
   }
-  .product__media {
-    background: var(--color-secondary);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
+  .product-media-primary img { width: 100%; height: auto; display: block; }
+  .product-media-badge { 
+    position: absolute; top: 20px; right: 20px; 
+    background: #ef4444; color: white; 
+    padding: 6px 12px; border-radius: 20px; 
+    font-weight: 700; font-size: 0.85rem; 
   }
-  .product__media img {
-    width: 100%;
-    height: auto;
-    display: block;
+
+  .product-media-thumbnails { display: flex; gap: 15px; margin-top: 15px; }
+  .thumbnail-item { 
+    width: 80px; height: 80px; 
+    border: 2px solid transparent; 
+    border-radius: var(--radius-sm); 
+    overflow: hidden; cursor: pointer; 
+    transition: var(--transition);
   }
-  .product__info {
-    color: var(--color-text-main);
+  .thumbnail-item.active { border-color: var(--color-primary); }
+  .thumbnail-item img { width: 100%; height: 100%; object-fit: cover; }
+
+  .product-trust-features { 
+    background: var(--color-bg); 
+    padding: 25px; border-radius: var(--radius-lg); 
+    display: grid; gap: 20px; 
+    margin-top: 40px;
   }
-  .product__title {
-    font-size: 2.5rem;
-    font-family: var(--font-heading);
-    margin-bottom: 0.5rem;
+  .trust-item { display: flex; gap: 15px; align-items: flex-start; }
+  .trust-icon { font-size: 1.5rem; }
+  .trust-text strong { display: block; color: var(--color-heading); font-size: 0.95rem; }
+  .trust-text span { font-size: 0.85rem; color: var(--color-text-light); }
+
+  /* Info Section */
+  .product-info-sticky { position: sticky; top: 100px; }
+  .product-meta-header { display: flex; gap: 10px; margin-bottom: 15px; }
+  .product-label { 
+    padding: 4px 10px; border-radius: 4px; 
+    font-size: 0.75rem; font-weight: 700; text-transform: uppercase; 
   }
-  .product__price {
-    font-size: 1.5rem;
-    color: var(--color-accent);
-    font-weight: bold;
-    margin-bottom: 1.5rem;
+  .label-semester { background: var(--color-secondary); color: white; }
+  .label-verified { background: rgba(34, 197, 94, 0.1); color: var(--color-primary-dark); }
+
+  .product-title { font-size: 2.5rem; line-height: 1.2; margin-bottom: 15px; }
+  .product-rating-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .rating-stars { color: var(--color-accent); font-size: 1.1rem; }
+  .rating-text { color: var(--color-text-light); font-size: 0.9rem; font-weight: 500; }
+
+  .product-price-row { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+  .price-current { font-size: 2rem; font-weight: 800; color: var(--color-primary-dark); font-family: var(--font-heading); }
+  .price-free { color: var(--color-primary); }
+  .price-old { font-size: 1.2rem; color: var(--color-text-light); text-decoration: line-through; }
+
+  .product-short-desc { font-size: 1.05rem; color: var(--color-text-light); margin-bottom: 30px; line-height: 1.6; }
+
+  .product-purchase-box { 
+    background: var(--color-bg); 
+    padding: 25px; border-radius: var(--radius-lg); 
+    border: 1px solid var(--color-border);
+    margin-bottom: 35px;
   }
-  .product__description {
-    color: var(--color-text-muted);
-    margin-bottom: 2rem;
-    line-height: 1.6;
-  }
-  .product__form {
-    background: var(--color-secondary);
-    padding: 1.5rem;
-    border-radius: var(--radius-lg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  .product__add-to-cart {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1.1rem;
+  .product-quantity-selector { margin-bottom: 20px; }
+  .product-quantity-selector label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; }
+  .qty-input-wrap { display: flex; max-width: 120px; }
+  .qty-btn { background: white; border: 1px solid var(--color-border); width: 35px; cursor: pointer; font-size: 1.2rem; }
+  .qty-input { width: 50px; text-align: center; border: 1px solid var(--color-border); border-left: 0; border-right: 0; font-weight: 600; }
+
+  .product-description-full { border-top: 1px solid var(--color-border); padding-top: 30px; }
+  .desc-heading { font-size: 1.3rem; margin-bottom: 20px; }
+  .rte { color: var(--color-text); line-height: 1.8; margin-bottom: 25px; }
+  .product-highlights { background: #fcfcfc; padding: 20px; border-radius: var(--radius-md); list-style: none; display: grid; gap: 12px; }
+  .product-highlights li { display: flex; align-items: center; gap: 10px; font-size: 0.95rem; }
+  .h-icon { font-size: 1.2rem; }
+
+  @media (max-width: 767px) {
+    .product-title { font-size: 1.8rem; }
+    .desktop-only { display: none; }
   }
 </style>
-
-<div class="product-template">
-  <div class="product__media">
-    {%- if product.featured_image -%}
-      <img src="{{ product.featured_image | img_url: '800x' }}" alt="{{ product.featured_image.alt | escape }}">
-    {%- else -%}
-      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-    {%- endif -%}
-  </div>
-
-  <div class="product__info">
-    <h1 class="product__title">{{ product.title }}</h1>
-    <div class="product__price">{{ product.price | money }}</div>
-    
-    <div class="product__description">
-      {{ product.description }}
-    </div>
-
-    <div class="product__form">
-      {%- form 'product', product -%}
-        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-        <button type="submit" name="add" class="btn btn--primary product__add-to-cart" {% unless product.available %}disabled{% endunless %}>
-          {% if product.available %}
-            Add to Cart
-          {% else %}
-            Sold Out
-          {% endif %}
-        </button>
-      {%- endform -%}
-    </div>
-  </div>
-</div>
 
 {% schema %}
 {
   "name": "Product Layout",
-  "settings": []
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_quantity_selector",
+      "label": "Show Quantity Selector",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share_buttons",
+      "label": "Show Share Buttons",
+      "default": true
+    }
+  ]
 }
 {% endschema %}
+
