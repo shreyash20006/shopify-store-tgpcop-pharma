@@ -1,0 +1,85 @@
+<style>
+  .cart-template {
+    padding: 4rem 1rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    color: var(--color-text-main);
+  }
+  .cart__title {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  .cart__empty {
+    text-align: center;
+    padding: 4rem;
+    background: var(--color-secondary);
+    border-radius: var(--radius-lg);
+  }
+  .cart__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-secondary);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+  }
+  .cart__item-title {
+    font-weight: bold;
+    color: var(--color-accent);
+  }
+  .cart__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .cart__total {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+</style>
+
+<div class="cart-template">
+  <h1 class="cart__title">Your Cart</h1>
+
+  {% if cart.item_count > 0 %}
+    <form action="{{ routes.cart_url }}" method="post" novalidate class="cart">
+      <div class="cart__items">
+        {% for item in cart.items %}
+          <div class="cart__item">
+            <div>
+              <div class="cart__item-title">{{ item.product.title }}</div>
+              <div class="cart__item-price">{{ item.final_price | money }}</div>
+            </div>
+            <div>
+              <a href="{{ item.url_to_remove }}" style="color: var(--color-text-muted); font-size: 0.9rem;">Remove</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="cart__footer">
+        <div class="cart__total">
+          Total: {{ cart.total_price | money }}
+        </div>
+        <button type="submit" name="checkout" class="btn btn--primary">Checkout</button>
+      </div>
+    </form>
+  {% else %}
+    <div class="cart__empty">
+      <h2>Your cart is currently empty.</h2>
+      <a href="{{ routes.root_url }}" class="btn btn--secondary" style="margin-top: 1rem;">Browse Notes</a>
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Cart Layout",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,94 @@
+<style>
+  .product-template {
+    padding: 4rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  @media(min-width: 768px) {
+    .product-template {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .product__media {
+    background: var(--color-secondary);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .product__media img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .product__info {
+    color: var(--color-text-main);
+  }
+  .product__title {
+    font-size: 2.5rem;
+    font-family: var(--font-heading);
+    margin-bottom: 0.5rem;
+  }
+  .product__price {
+    font-size: 1.5rem;
+    color: var(--color-accent);
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+  }
+  .product__description {
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+  .product__form {
+    background: var(--color-secondary);
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .product__add-to-cart {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+  }
+</style>
+
+<div class="product-template">
+  <div class="product__media">
+    {%- if product.featured_image -%}
+      <img src="{{ product.featured_image | img_url: '800x' }}" alt="{{ product.featured_image.alt | escape }}">
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </div>
+
+  <div class="product__info">
+    <h1 class="product__title">{{ product.title }}</h1>
+    <div class="product__price">{{ product.price | money }}</div>
+    
+    <div class="product__description">
+      {{ product.description }}
+    </div>
+
+    <div class="product__form">
+      {%- form 'product', product -%}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        <button type="submit" name="add" class="btn btn--primary product__add-to-cart" {% unless product.available %}disabled{% endunless %}>
+          {% if product.available %}
+            Add to Cart
+          {% else %}
+            Sold Out
+          {% endif %}
+        </button>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Layout",
+  "settings": []
+}
+{% endschema %}
