@@ -44,19 +44,16 @@
   <!-- Skip to content -->
   <a class="skip-to-content" href="#MainContent">Skip to content</a>
 
-  <!-- ===== ANNOUNCEMENT BAR ===== -->
-  {% section 'announcement-bar' %}
-
-  <!-- ===== HEADER ===== -->
-  {% section 'header' %}
+  <!-- ===== HEADER AREA ===== -->
+  {% sections 'header-group' %}
 
   <!-- ===== MAIN CONTENT ===== -->
   <main id="MainContent" role="main" tabindex="-1">
     {{ content_for_layout }}
   </main>
 
-  <!-- ===== FOOTER ===== -->
-  {% section 'footer' %}
+  <!-- ===== FOOTER AREA ===== -->
+  {% sections 'footer-group' %}
 
   <!-- ===== STICKY MOBILE CTA ===== -->
   <div class="sticky-mobile-cta" id="StickyMobileCta">

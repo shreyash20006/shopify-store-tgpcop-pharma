@@ -1,0 +1,22 @@
+{
+  "type": "header",
+  "name": "Header Group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "message": "🎓 India's #1 Pharmacy Education Platform | Free GPAT Study Material Available | Download Now!",
+        "link": "/pages/free-pdfs",
+        "link_text": "Download Free"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {}
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header"
+  ]
+}
