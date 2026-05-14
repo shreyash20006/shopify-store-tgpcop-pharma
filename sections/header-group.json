@@ -28,10 +28,66 @@
         "logo_width": 90,
         "menu": "main-menu"
       }
+    },
+    "1778763377d4b854e1": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_d187a34_KYRDnd": {
+          "type": "ai_gen_block_d187a34",
+          "settings": {
+            "heading": "Latest Products",
+            "subheading": "Explore our newest additions",
+            "heading_alignment": "center",
+            "products_to_show": 8,
+            "products_per_row": 4,
+            "products_per_row_tablet": "3",
+            "products_per_row_mobile": "2",
+            "grid_gap": 20,
+            "desktop_width_percent": 100,
+            "show_vendor": false,
+            "show_price": true,
+            "show_badge": true,
+            "badge_text": "New",
+            "card_padding": 20,
+            "card_border_radius": 12,
+            "show_view_all": true,
+            "view_all_text": "View All Products",
+            "view_all_url": "",
+            "background_color": "#ffffff",
+            "heading_color": "#1a4d2e",
+            "subheading_color": "#666666",
+            "card_background": "#ffffff",
+            "card_border_color": "#e5e5e5",
+            "product_title_color": "#1a4d2e",
+            "vendor_color": "#666666",
+            "price_color": "#7b2cbf",
+            "compare_price_color": "#999999",
+            "badge_background": "#7b2cbf",
+            "badge_text_color": "#ffffff",
+            "button_background": "#1a4d2e",
+            "button_text_color": "#ffffff",
+            "button_hover_background": "#7b2cbf",
+            "link_hover_color": "#7b2cbf",
+            "heading_size": 32,
+            "subheading_size": 16,
+            "product_title_size": 16,
+            "price_size": 18,
+            "section_padding": 50,
+            "heading_spacing": 40,
+            "button_border_radius": 8
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_d187a34_KYRDnd"
+      ],
+      "settings": {}
     }
   },
   "order": [
     "announcement-bar",
-    "header"
+    "header",
+    "1778763377d4b854e1"
   ]
 }
