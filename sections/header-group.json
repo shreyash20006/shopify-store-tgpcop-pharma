@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "type": "header",
   "name": "Header Group",
@@ -14,7 +5,9 @@
     "announcement-bar": {
       "type": "announcement-bar",
       "settings": {
-        "message": "🎓 India's #1 Pharmacy Education Platform | Free GPAT Study Material Available | Download Now!",
+        "message": "India's #1 Pharmacy Education Platform | Free GPAT Study Material Available | Download Now!",
+        "message2": "New GPAT 2025 Notes Added",
+        "message3": "Join 5000+ Pharmacy Students",
         "link": "/pages/free-pdfs",
         "link_text": "Download Free"
       }

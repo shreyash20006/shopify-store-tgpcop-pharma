@@ -6,6 +6,7 @@
     min-height: 70vh;
     text-align: center;
     padding: 2rem;
+    background: var(--color-bg);
   }
   .page-404-container__content {
     background: var(--color-secondary);
@@ -22,14 +23,15 @@
     color: var(--color-accent);
     margin-bottom: 1rem;
     line-height: 1;
+    font-family: var(--font-heading);
   }
   .page-404-container__sub {
     font-size: 1.5rem;
-    color: var(--color-text-main);
+    color: var(--color-white);
     margin-bottom: 2rem;
   }
   .page-404-container__text {
-    color: var(--color-text-muted);
+    color: #94a3b8;
     margin-bottom: 2rem;
   }
   .page-404-container__search form {
@@ -42,15 +44,20 @@
     padding: 0.75rem 1rem;
     border-radius: var(--radius-sm);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(255,255,255,0.08);
     color: white;
+    font-family: var(--font-body);
+    outline: none;
   }
+  .page-404-container__search input[type="search"]::placeholder { color: #64748b; }
   .page-404-container__search button {
     padding: 0.75rem 1.5rem;
   }
+  .page-404-container .btn-outline { border-color: rgba(255,255,255,0.3); color: white; }
+  .page-404-container .btn-outline:hover { background: var(--color-primary); border-color: var(--color-primary); color: white; }
 </style>
 
-<div class="page-404-container">
+<div class="page-404-container" id="MainContent">
   <div class="page-404-container__content">
     <h1 class="page-404-container__title">404</h1>
     <h2 class="page-404-container__sub">Page Not Found</h2>

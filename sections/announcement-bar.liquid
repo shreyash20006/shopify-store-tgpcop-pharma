@@ -1,25 +1,33 @@
 {% comment %}
-  Announcement Bar Section
-  Sticky green bar at the top of every page
+  Announcement Bar Section — TGPCOP PHARMA
+  Sticky green bar with CSS marquee animation
 {% endcomment %}
 
 <div class="announcement-bar" id="AnnouncementBar" role="complementary" aria-label="Announcement">
   <div class="announcement-inner">
-    <div class="announcement-marquee">
+    <div class="announcement-marquee" aria-hidden="true">
       <span class="announcement-text">
-        🎓 {{ section.settings.message }}
+        🎓 {{ section.settings.message | default: "India's #1 Pharmacy Education Platform | Free GPAT Study Material Available | Download Now!" }}
         &nbsp;&nbsp;|&nbsp;&nbsp;
-        🚀 {{ section.settings.message2 | default: "New GPAT 2025 Notes Added" }} &nbsp;&nbsp;|&nbsp;&nbsp;
-        📱 {{ section.settings.message3 | default: "Join 5000+ Pharmacy Students" }} &nbsp;&nbsp;|&nbsp;&nbsp;
-        🎓 {{ section.settings.message }}
+        🚀 {{ section.settings.message2 | default: "New GPAT 2025 Notes Added" }}
         &nbsp;&nbsp;|&nbsp;&nbsp;
-        🚀 {{ section.settings.message2 | default: "New GPAT 2025 Notes Added" }} &nbsp;&nbsp;|&nbsp;&nbsp;
-        📱 {{ section.settings.message3 | default: "Join 5000+ Pharmacy Students" }} &nbsp;&nbsp;
+        📱 {{ section.settings.message3 | default: "Join 5000+ Pharmacy Students" }}
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        🎓 {{ section.settings.message | default: "India's #1 Pharmacy Education Platform | Free GPAT Study Material Available | Download Now!" }}
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        🚀 {{ section.settings.message2 | default: "New GPAT 2025 Notes Added" }}
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        📱 {{ section.settings.message3 | default: "Join 5000+ Pharmacy Students" }}
+        &nbsp;&nbsp;
       </span>
     </div>
     {% if section.settings.link != blank %}
-      <a href="{{ section.settings.link }}" class="announcement-cta">
-        {{ section.settings.link_text | default: 'Learn More' }} →
+      <a href="{{ section.settings.link }}" class="announcement-cta" aria-label="{{ section.settings.link_text | default: 'Download Free' }}">
+        {{ section.settings.link_text | default: 'Download Free' }} →
+      </a>
+    {% else %}
+      <a href="/pages/free-pdfs" class="announcement-cta">
+        Download Free →
       </a>
     {% endif %}
   </div>
@@ -32,18 +40,30 @@
     {
       "type": "text",
       "id": "message",
-      "label": "Announcement Message",
-      "default": "India's #1 Pharmacy Education Platform | Free GPAT Study Material Available!"
+      "label": "Message 1",
+      "default": "India's #1 Pharmacy Education Platform | Free GPAT Study Material Available | Download Now!"
+    },
+    {
+      "type": "text",
+      "id": "message2",
+      "label": "Message 2",
+      "default": "New GPAT 2025 Notes Added"
+    },
+    {
+      "type": "text",
+      "id": "message3",
+      "label": "Message 3",
+      "default": "Join 5000+ Pharmacy Students"
     },
     {
       "type": "url",
       "id": "link",
-      "label": "Link URL"
+      "label": "Button Link URL"
     },
     {
       "type": "text",
       "id": "link_text",
-      "label": "Link Text",
+      "label": "Button Text",
       "default": "Download Free"
     }
   ],

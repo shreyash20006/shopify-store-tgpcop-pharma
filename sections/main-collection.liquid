@@ -1,9 +1,7 @@
 {% comment %}
-  TGPCOP Pharma - boAt-Style Collection Template
+  TGPCOP Pharma - Collection Page
+  CSS & fonts loaded via layout/theme.liquid
 {% endcomment %}
-
-{{ 'theme.css' | asset_url | stylesheet_tag }}
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 {%- paginate collection.products by section.settings.products_per_page -%}
 <section class="boat-collection-page" id="MainCollection-{{ section.id }}">
@@ -37,7 +35,7 @@
           {%- for tag in collection.all_tags -%}
             {%- if tag contains 'Semester' or tag contains 'GPAT' -%}
               <a href="{{ collection.url }}/{{ tag | handle }}" class="boat-pill {% if current_tags contains tag %}active{% endif %}">{{ tag }}</a>
-            {%- endif -%-}
+            {%- endif -%}
           {%- endfor -%}
         </div>
       </div>

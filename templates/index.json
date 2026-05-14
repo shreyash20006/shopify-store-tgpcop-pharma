@@ -1,13 +1,5 @@
 {
   "sections": {
-    "announcement-bar": {
-      "type": "announcement-bar",
-      "settings": {
-        "message": "🎓 India's #1 Pharmacy Education Platform | Free GPAT Study Material Available | Download Now!",
-        "link": "/pages/free-pdfs",
-        "link_text": "Download Free"
-      }
-    },
     "hero-banner": {
       "type": "hero-banner",
       "settings": {}

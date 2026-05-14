@@ -1,28 +1,35 @@
 <style>
   .page-template {
-    padding: 4rem 1rem;
+    padding: 60px 20px 80px;
     max-width: 800px;
     margin: 0 auto;
-    color: var(--color-text-main);
+    color: var(--color-text);
   }
   .page__title {
-    font-size: 3rem;
-    color: var(--color-accent);
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--color-heading);
     margin-bottom: 2rem;
     text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 3px solid var(--color-primary);
   }
   .page__content {
     line-height: 1.8;
-    color: var(--color-text-muted);
+    color: var(--color-text);
+    font-family: var(--font-body);
   }
   .page__content h2, .page__content h3 {
-    color: var(--color-text-main);
+    font-family: var(--font-heading);
+    color: var(--color-heading);
     margin-top: 2rem;
     margin-bottom: 1rem;
   }
+  .page__content a { color: var(--color-primary); }
+  .page__content img { border-radius: var(--radius-md); }
 </style>
 
-<div class="page-template">
+<div class="page-template" id="MainContent">
   <h1 class="page__title">{{ page.title }}</h1>
   <div class="page__content rte">
     {{ page.content }}
