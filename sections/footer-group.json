@@ -30,7 +30,6 @@
     },
     "footer": {
       "type": "footer",
-      "disabled": true,
       "settings": {
         "footer_logo": "shopify://shop_images/logo_notes.jpg",
         "tagline": "India's #1 Pharmacy Education Platform. Empowering students with premium study materials since 2020.",
