@@ -11,8 +11,26 @@
   "type": "footer",
   "name": "Footer Group",
   "sections": {
+    "177877105640ef6be4": {
+      "type": "apps",
+      "blocks": {
+        "dakaas_social_bar_social_bar_TGWV6a": {
+          "type": "shopify://apps/dakaas-social-bar/blocks/social-bar/0d821215-43b9-4a39-925d-44613cd0dd23",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "dakaas_social_bar_social_bar_TGWV6a"
+      ],
+      "settings": {}
+    },
+    "17787709221aef2457": {
+      "type": "_blocks",
+      "settings": {}
+    },
     "footer": {
       "type": "footer",
+      "disabled": true,
       "settings": {
         "footer_logo": "shopify://shop_images/logo_notes.jpg",
         "tagline": "India's #1 Pharmacy Education Platform. Empowering students with premium study materials since 2020.",
@@ -35,6 +53,8 @@
     }
   },
   "order": [
+    "177877105640ef6be4",
+    "17787709221aef2457",
     "footer"
   ]
 }

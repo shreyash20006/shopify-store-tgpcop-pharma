@@ -56,9 +56,14 @@
         "badge-4"
       ],
       "settings": {}
+    },
+    "17787703985cb73e82": {
+      "type": "_blocks",
+      "settings": {}
     }
   },
   "order": [
-    "trust-badges"
+    "trust-badges",
+    "17787703985cb73e82"
   ]
 }
