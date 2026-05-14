@@ -83,11 +83,70 @@
         "ai_gen_block_d187a34_KYRDnd"
       ],
       "settings": {}
+    },
+    "1778766093210aa441": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_efccd23_8GLCYK": {
+          "type": "ai_gen_block_efccd23",
+          "settings": {
+            "title": "Why Choose TGPCOP PHARMA?",
+            "subtitle": "Your trusted partner for premium pharmacy education materials designed for Indian pharmacy students",
+            "title_size": 36,
+            "subtitle_size": 16,
+            "feature_1_title": "Premium Quality Content",
+            "feature_1_text": "Expertly curated notes and study materials designed specifically for Indian pharmacy curriculum and GPAT preparation",
+            "feature_2_title": "Instant Access",
+            "feature_2_text": "Download your study materials immediately after purchase and start learning without any delays",
+            "feature_3_title": "Comprehensive Coverage",
+            "feature_3_text": "Semester-wise notes, MCQ banks, previous year questions, and complete GPAT preparation resources",
+            "feature_4_title": "Exam-Focused Approach",
+            "feature_4_text": "All materials are designed with exam success in mind, covering key topics and frequently asked questions",
+            "feature_5_title": "Regular Updates",
+            "feature_5_text": "Stay current with the latest syllabus changes and exam patterns with our regularly updated content",
+            "feature_6_title": "Student-Centric Support",
+            "feature_6_text": "Dedicated support team to help you with any questions or access issues throughout your learning journey",
+            "cta_text": "Explore Our Materials",
+            "cta_link": "",
+            "desktop_width_percent": 100,
+            "section_padding": 60,
+            "spacing_between_elements": 40,
+            "card_gap": 30,
+            "card_alignment": "center",
+            "card_padding": 30,
+            "card_border_radius": 12,
+            "card_title_size": 20,
+            "card_text_size": 14,
+            "icon_size": 70,
+            "icon_spacing": 20,
+            "button_text_size": 16,
+            "button_border_radius": 8,
+            "background_color": "#f8f9fa",
+            "title_color": "#0d5c3d",
+            "subtitle_color": "#0d5c3d",
+            "card_background": "#ffffff",
+            "card_border_color": "#0d5c3d",
+            "card_title_color": "#0d5c3d",
+            "card_text_color": "#0d5c3d",
+            "icon_background": "#0d5c3d",
+            "icon_color": "#ffffff",
+            "button_background": "#0d5c3d",
+            "button_hover_background": "#6b46c1",
+            "button_text_color": "#ffffff"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_efccd23_8GLCYK"
+      ],
+      "settings": {}
     }
   },
   "order": [
     "announcement-bar",
     "header",
-    "1778763377d4b854e1"
+    "1778763377d4b854e1",
+    "1778766093210aa441"
   ]
 }

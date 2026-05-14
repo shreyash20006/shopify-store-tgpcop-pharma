@@ -13,9 +13,14 @@
       "type": "main-404",
       "disabled": true,
       "settings": {}
+    },
+    "177876542386d92dba": {
+      "type": "_blocks",
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "177876542386d92dba"
   ]
 }
