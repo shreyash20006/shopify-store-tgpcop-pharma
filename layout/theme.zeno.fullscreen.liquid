@@ -1,0 +1,44 @@
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>
+    {% if page_title %}{{ page_title }} | {% endif %}{{ shop.name }}
+  </title>
+
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  <meta name="theme-color" content="#0B1C2C">
+  <meta property="og:site_name" content="{{ shop.name }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  <meta property="og:title" content="{{ page_title | escape }}">
+  <meta property="og:type" content="website">
+  {% if page_image %}
+    <meta property="og:image" content="{{ page_image | img_url: '1200x630' }}">
+  {% endif %}
+
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Favicon -->
+  {% if settings.favicon != blank %}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | img_url: '32x32' }}">
+  {% endif %}
+
+  <!-- Theme CSS -->
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+
+  <!-- Shopify required -->
+  {{ content_for_header }}
+</head>
+
+<body class="{% if customer %}customer-logged-in{% endif %} template-{{ template | replace: '/', '-' | handle }}">
+          {{ content_for_layout }}
+        </body>
+      
