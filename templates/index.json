@@ -51,6 +51,10 @@
       "type": "study-series",
       "settings": {}
     },
+    "featured-collections": {
+      "type": "featured-collections",
+      "settings": {}
+    },
     "product-grid": {
       "type": "product-grid",
       "settings": {
@@ -58,6 +62,10 @@
         "collection": "",
         "products_to_show": 8
       }
+    },
+    "free-resources": {
+      "type": "free-resources",
+      "settings": {}
     },
     "why-tgpcop": {
       "type": "why-tgpcop",
@@ -171,7 +179,9 @@
     "hero-banner",
     "trust-badges",
     "study-series",
+    "featured-collections",
     "product-grid",
+    "free-resources",
     "why-tgpcop",
     "testimonials"
   ]
