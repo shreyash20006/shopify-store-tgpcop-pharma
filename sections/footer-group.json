@@ -1,10 +1,37 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "type": "footer",
   "name": "Footer Group",
   "sections": {
     "footer": {
       "type": "footer",
-      "settings": {}
+      "settings": {
+        "footer_logo": "shopify://shop_images/logo_notes.jpg",
+        "tagline": "India's #1 Pharmacy Education Platform. Empowering students with premium study materials since 2020.",
+        "email_1": "support@tgpcoppharma.shop",
+        "instagram": "",
+        "youtube": "",
+        "telegram": "",
+        "pinterest": "",
+        "whatsapp": "",
+        "menu_1_title": "Study Materials",
+        "menu_1": "",
+        "menu_2_title": "Top Subjects",
+        "menu_2": "",
+        "menu_3_title": "Company",
+        "menu_3": "",
+        "newsletter_heading": "Join the Pharma Community",
+        "newsletter_text": "Get free notes, GPAT updates, and exam tips directly in your inbox.",
+        "copyright_text": "Made with ❤️ for Pharmacy Students."
+      }
     }
   },
   "order": [
