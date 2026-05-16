@@ -1,165 +1,424 @@
 {% comment %}
-  TGPCOP Pharma - Collection Page
-  CSS & fonts loaded via layout/theme.liquid
+  TGPCOP NOTES — Premium Collection Page
+  4-col desktop | 2-col tablet | 1-col mobile
+  Applies to: B.Pharm, D.Pharm, All collections
 {% endcomment %}
 
 {%- paginate collection.products by section.settings.products_per_page -%}
-<section class="boat-collection-page" id="MainCollection-{{ section.id }}">
-  
-  <!-- Sleek Collection Header -->
-  <header class="boat-collection-hero">
-    <div class="container">
-      <nav class="boat-breadcrumb">
+
+<div class="tgpco">
+
+  <!-- ────────── HERO HEADER ────────── -->
+  <header class="tgpco__hero">
+    <div class="tgpco__hero-inner">
+      <!-- Breadcrumb -->
+      <nav class="tgpco__bread" aria-label="breadcrumb">
         <a href="{{ routes.root_url }}">Home</a>
-        <span class="sep">/</span>
-        <span class="current">{{ collection.title }}</span>
+        <span aria-hidden="true">/</span>
+        <span>{{ collection.title }}</span>
       </nav>
 
-      <div class="boat-hero-content">
-        <h1 class="boat-collection-title">{{ collection.title }}</h1>
-        {%- if collection.description != blank -%}
-          <div class="boat-collection-desc">{{ collection.description }}</div>
-        {%- endif -%}
-        <div class="boat-collection-badge">{{ collection.products_count }} Premium Materials</div>
+      <!-- Title -->
+      <h1 class="tgpco__hero-title">{{ collection.title }}</h1>
+
+      {%- if collection.description != blank -%}
+        <p class="tgpco__hero-desc">{{ collection.description | strip_html | truncate: 180 }}</p>
+      {%- endif -%}
+
+      <!-- Stats row -->
+      <div class="tgpco__hero-stats">
+        <div class="tgpco__stat">
+          <span class="tgpco__stat-icon">📚</span>
+          <span class="tgpco__stat-val">{{ collection.products_count }}</span>
+          <span class="tgpco__stat-lbl">Notes Available</span>
+        </div>
+        <div class="tgpco__stat-div"></div>
+        <div class="tgpco__stat">
+          <span class="tgpco__stat-icon">⚡</span>
+          <span class="tgpco__stat-val">Instant</span>
+          <span class="tgpco__stat-lbl">PDF Download</span>
+        </div>
+        <div class="tgpco__stat-div"></div>
+        <div class="tgpco__stat">
+          <span class="tgpco__stat-icon">✔️</span>
+          <span class="tgpco__stat-val">PCI</span>
+          <span class="tgpco__stat-lbl">Syllabus Aligned</span>
+        </div>
+        <div class="tgpco__stat-div"></div>
+        <div class="tgpco__stat">
+          <span class="tgpco__stat-icon">⭐</span>
+          <span class="tgpco__stat-val">4.9</span>
+          <span class="tgpco__stat-lbl">Avg. Rating</span>
+        </div>
       </div>
     </div>
   </header>
 
-  <div class="container boat-collection-layout">
-    
-    <!-- Modern Toolbar -->
-    <div class="boat-collection-toolbar">
-      <div class="boat-toolbar-left">
-        <div class="boat-filter-pills">
-          <a href="{{ collection.url }}" class="boat-pill {% unless current_tags %}active{% endunless %}">All Products</a>
+  <!-- ────────── TOOLBAR ────────── -->
+  <div class="tgpco__wrap">
+    <div class="tgpco__toolbar">
+      <div class="tgpco__toolbar-left">
+        <!-- Filter pills from tags -->
+        <div class="tgpco__pills">
+          <a href="{{ collection.url }}" class="tgpco__pill {% unless current_tags %}tgpco__pill--active{% endunless %}">All</a>
           {%- for tag in collection.all_tags -%}
-            {%- if tag contains 'Semester' or tag contains 'GPAT' -%}
-              <a href="{{ collection.url }}/{{ tag | handle }}" class="boat-pill {% if current_tags contains tag %}active{% endif %}">{{ tag }}</a>
+            {%- if tag contains 'Sem' or tag contains 'GPAT' or tag contains 'Semester' -%}
+              <a
+                href="{{ collection.url }}/{{ tag | handle }}"
+                class="tgpco__pill {% if current_tags contains tag %}tgpco__pill--active{% endif %}"
+              >{{ tag }}</a>
             {%- endif -%}
           {%- endfor -%}
         </div>
       </div>
-
-      <div class="boat-toolbar-right">
-        <div class="boat-sort-wrap">
-          <select name="sort_by" id="SortBy" class="boat-sort-select" onchange="location.href = '{{ collection.url }}?sort_by=' + this.value">
-            <option value="manual">Featured</option>
-            <option value="best-selling">Best Selling</option>
-            <option value="price-ascending">Price: Low to High</option>
-            <option value="price-descending">Price: High to Low</option>
-          </select>
-        </div>
+      <div class="tgpco__toolbar-right">
+        <select
+          class="tgpco__sort"
+          onchange="location.href = '{{ collection.url }}?sort_by=' + this.value"
+          aria-label="Sort products"
+        >
+          <option value="manual">Featured</option>
+          <option value="best-selling">Best Selling</option>
+          <option value="price-ascending">Price ↑</option>
+          <option value="price-descending">Price ↓</option>
+          <option value="title-ascending">A → Z</option>
+        </select>
       </div>
     </div>
 
-    <!-- Product Grid -->
-    <div class="boat-product-grid" id="ProductGridContainer">
-      {%- for product in collection.products -%}
-        <div class="boat-grid-item">
-          {% render 'product-card', product: product %}
-        </div>
+    <!-- ────────── PRODUCT GRID ────────── -->
+    <div class="tgpco__grid" id="ProductGrid">
+      {%- if collection.products_count > 0 -%}
+        {%- for product in collection.products -%}
+          <div class="tgpco__item">
+            {% render 'product-card', product: product %}
+          </div>
+        {%- endfor -%}
       {%- else -%}
-        <div class="boat-empty-state">
-          <div class="empty-icon">📂</div>
-          <h3>No Study Materials Found</h3>
-          <p>Try adjusting your filters or search terms.</p>
-          <a href="{{ collection.url }}" class="boat-pill active">Reset All</a>
+        <div class="tgpco__empty">
+          <div class="tgpco__empty-icon">📔</div>
+          <h3 class="tgpco__empty-title">No notes found</h3>
+          <p class="tgpco__empty-desc">New study materials are being added — check back soon!</p>
+          <a href="/collections/all" class="tgpco__empty-btn">Browse All Notes</a>
         </div>
-      {%- endfor -%}
+      {%- endif -%}
     </div>
 
-    <!-- Premium Pagination -->
+    <!-- ────────── PAGINATION ────────── -->
     {%- if paginate.pages > 1 -%}
-      <nav class="boat-pagination">
-        <ul class="boat-pagination-list">
-          {%- if paginate.previous -%}
-            <li><a href="{{ paginate.previous.url }}" class="boat-pag-link">Prev</a></li>
+      <nav class="tgpco__pag" aria-label="Pagination">
+        {%- if paginate.previous -%}
+          <a href="{{ paginate.previous.url }}" class="tgpco__pag-btn">← Prev</a>
+        {%- endif -%}
+        {%- for part in paginate.parts -%}
+          {%- if part.is_link -%}
+            <a href="{{ part.url }}" class="tgpco__pag-btn">{{ part.title }}</a>
+          {%- else -%}
+            <span class="tgpco__pag-btn {% if part.title == paginate.current_page %}tgpco__pag-btn--active{% endif %}">{{ part.title }}</span>
           {%- endif -%}
-
-          {%- for part in paginate.parts -%}
-            <li>
-              {%- if part.is_link -%}
-                <a href="{{ part.url }}" class="boat-pag-link">{{ part.title }}</a>
-              {%- else -%}
-                <span class="boat-pag-link {% if part.title == paginate.current_page %}active{% endif %}">{{ part.title }}</span>
-              {%- endif -%}
-            </li>
-          {%- endfor -%}
-
-          {%- if paginate.next -%}
-            <li><a href="{{ paginate.next.url }}" class="boat-pag-link">Next</a></li>
-          {%- endif -%}
-        </ul>
+        {%- endfor -%}
+        {%- if paginate.next -%}
+          <a href="{{ paginate.next.url }}" class="tgpco__pag-btn">Next →</a>
+        {%- endif -%}
       </nav>
     {%- endif -%}
 
-  </div>
-</section>
+  </div><!-- /.tgpco__wrap -->
+</div><!-- /.tgpco -->
+
 {%- endpaginate -%}
 
 <style>
-  .boat-collection-page { font-family: 'Inter', sans-serif; background: #fdfdfd; padding-bottom: 100px; }
-  
-  .boat-collection-hero { 
-    background: #000b33; color: white; padding: 80px 0; 
-    text-align: center; border-radius: 0 0 40px 40px;
-    margin-bottom: 40px;
-  }
-  
-  .boat-breadcrumb { font-size: 0.8rem; opacity: 0.6; margin-bottom: 24px; display: flex; justify-content: center; gap: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-  .boat-breadcrumb a { color: white; text-decoration: none; }
-  .boat-breadcrumb .current { color: #22c55e; }
+/* ═════════════════════════════════════════════
+   TGPCOP NOTES — Premium Collection Page
+   Applies to: B.Pharm | D.Pharm | All Catalog
+═════════════════════════════════════════════ */
 
-  .boat-collection-title { font-size: 3.5rem; font-weight: 900; margin: 0 0 16px; letter-spacing: -1px; }
-  .boat-collection-desc { font-size: 1.1rem; opacity: 0.8; max-width: 600px; margin: 0 auto 24px; line-height: 1.6; }
-  .boat-collection-badge { background: rgba(34, 197, 94, 0.2); color: #22c55e; display: inline-block; padding: 6px 16px; border-radius: 50px; font-weight: 800; font-size: 0.85rem; border: 1px solid rgba(34, 197, 94, 0.3); }
+/* Page wrapper */
+.tgpco {
+  font-family: 'Inter', 'Poppins', sans-serif;
+  background: #F8FAFC;
+  min-height: 100vh;
+  padding-bottom: 100px;
+}
 
-  .boat-collection-toolbar { 
-    display: flex; justify-content: space-between; align-items: center; 
-    margin-bottom: 40px; gap: 20px; flex-wrap: wrap;
-    background: white; padding: 12px 24px; border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  }
-  
-  .boat-filter-pills { display: flex; gap: 10px; flex-wrap: wrap; }
-  .boat-pill { 
-    text-decoration: none; padding: 8px 18px; border-radius: 50px; 
-    font-size: 0.85rem; font-weight: 700; color: #1e293b; 
-    background: #f1f5f9; transition: 0.3s; border: 1.5px solid transparent;
-  }
-  .boat-pill:hover, .boat-pill.active { background: #000b33; color: white; }
+/* ── Hero Header ── */
+.tgpco__hero {
+  background: linear-gradient(135deg, #000B33 0%, #0B1C2C 60%, #102E20 100%);
+  color: #fff;
+  padding: 72px 0 60px;
+  border-radius: 0 0 48px 48px;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.tgpco__hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(34,197,94,0.12) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(34,197,94,0.08) 0%, transparent 40%);
+  pointer-events: none;
+}
+.tgpco__hero-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 28px;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
 
-  .boat-sort-select { 
-    border: 1.5px solid #e2e8f0; border-radius: 50px; padding: 8px 20px; 
-    font-size: 0.85rem; font-weight: 700; outline: none; cursor: pointer;
-    background: white;
-  }
+/* Breadcrumb */
+.tgpco__bread {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 20px;
+}
+.tgpco__bread a {
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.tgpco__bread a:hover { color: #22C55E; }
+.tgpco__bread span:last-child { color: #22C55E; }
 
-  .boat-product-grid { 
-    display: grid; grid-template-columns: repeat(1, 1fr); gap: 24px; 
-  }
-  @media (min-width: 480px) { .boat-product-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 992px) { .boat-product-grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (min-width: 1200px) { .boat-product-grid { grid-template-columns: repeat(4, 1fr); } }
+/* Title */
+.tgpco__hero-title {
+  font-family: 'Poppins', 'Inter', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0 0 16px;
+}
 
-  .boat-pagination { margin-top: 60px; display: flex; justify-content: center; }
-  .boat-pagination-list { display: flex; gap: 8px; list-style: none; padding: 0; }
-  .boat-pag-link { 
-    min-width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; 
-    background: white; border: 1.5px solid #e2e8f0; border-radius: 12px;
-    text-decoration: none; color: #1e293b; font-weight: 800; transition: 0.3s;
-  }
-  .boat-pag-link:hover, .boat-pag-link.active { background: #22c55e; color: white; border-color: #22c55e; box-shadow: 0 4px 15px rgba(34,197,94,0.3); }
+/* Description */
+.tgpco__hero-desc {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.68);
+  max-width: 600px;
+  margin: 0 auto 32px;
+  line-height: 1.7;
+}
 
-  @media (max-width: 768px) {
-    .boat-collection-title { font-size: 2.2rem; }
-    .boat-collection-hero { padding: 50px 0; border-radius: 0 0 30px 30px; }
-  }
+/* Stats row */
+.tgpco__hero-stats {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 100px;
+  padding: 14px 28px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0;
+  backdrop-filter: blur(12px);
+}
+.tgpco__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px;
+  gap: 2px;
+}
+.tgpco__stat-icon { font-size: 1.1rem; line-height: 1; }
+.tgpco__stat-val {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #22C55E;
+  line-height: 1.2;
+}
+.tgpco__stat-lbl {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.tgpco__stat-div {
+  width: 1px;
+  height: 36px;
+  background: rgba(255,255,255,0.18);
+}
+
+/* ── Content Wrapper ── */
+.tgpco__wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── Toolbar ── */
+.tgpco__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: #ffffff;
+  border: 1px solid #E8EEF5;
+  border-radius: 20px;
+  padding: 12px 20px;
+  margin-bottom: 32px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+.tgpco__toolbar-left { flex: 1; overflow: hidden; }
+.tgpco__pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tgpco__pill {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 0.80rem;
+  font-weight: 700;
+  color: #334155;
+  background: #F1F5F9;
+  border: 1.5px solid transparent;
+  text-decoration: none;
+  transition: all 0.22s ease;
+  white-space: nowrap;
+}
+.tgpco__pill:hover {
+  background: #DCFCE7;
+  color: #166534;
+  border-color: rgba(34,197,94,0.35);
+}
+.tgpco__pill--active {
+  background: #22C55E;
+  color: #ffffff;
+  border-color: #22C55E;
+  box-shadow: 0 3px 10px rgba(34,197,94,0.30);
+}
+.tgpco__sort {
+  padding: 8px 18px;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 100px;
+  font-size: 0.80rem;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  color: #334155;
+  background: #fff;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.tgpco__sort:focus { border-color: #22C55E; }
+
+/* ── Product Grid ── */
+.tgpco__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 1200px) {
+  .tgpco__grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+}
+@media (max-width: 900px) {
+  .tgpco__grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+}
+@media (max-width: 520px) {
+  .tgpco__grid { grid-template-columns: 1fr; gap: 16px; }
+  .tgpco__wrap { padding: 0 16px; }
+  .tgpco__hero { border-radius: 0 0 28px 28px; padding: 52px 0 40px; }
+  .tgpco__hero-stats { gap: 8px; padding: 12px 16px; }
+  .tgpco__stat { padding: 0 12px; }
+  .tgpco__stat-div { display: none; }
+}
+
+/* ── Empty State ── */
+.tgpco__empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 24px;
+  background: #fff;
+  border: 1px dashed #CBD5E1;
+  border-radius: 24px;
+}
+.tgpco__empty-icon { font-size: 56px; margin-bottom: 16px; }
+.tgpco__empty-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 8px;
+}
+.tgpco__empty-desc { color: #64748B; margin-bottom: 24px; }
+.tgpco__empty-btn {
+  display: inline-block;
+  background: #22C55E;
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+}
+.tgpco__empty-btn:hover { background: #16A34A; transform: translateY(-2px); }
+
+/* ── Pagination ── */
+.tgpco__pag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 56px;
+  flex-wrap: wrap;
+}
+.tgpco__pag-btn {
+  min-width: 44px;
+  height: 44px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #334155;
+  text-decoration: none;
+  transition: all 0.22s ease;
+}
+.tgpco__pag-btn:hover {
+  background: #DCFCE7;
+  border-color: #22C55E;
+  color: #166534;
+}
+.tgpco__pag-btn--active {
+  background: #22C55E;
+  border-color: #22C55E;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(34,197,94,0.35);
+}
+
+/* ── Toolbar responsive ── */
+@media (max-width: 640px) {
+  .tgpco__toolbar { flex-direction: column; align-items: flex-start; }
+  .tgpco__toolbar-right { width: 100%; }
+  .tgpco__sort { width: 100%; }
+}
 </style>
 
 {% schema %}
 {
-  "name": "boAt-Style Collection",
+  "name": "Premium Collection",
   "settings": [
     {
       "type": "range",
@@ -168,9 +427,8 @@
       "max": 24,
       "step": 4,
       "label": "Products per page",
-      "default": 12
+      "default": 16
     }
   ]
 }
 {% endschema %}
-
