@@ -1,92 +1,328 @@
 {% comment %}
-  Product Card Snippet
-  Usage: {% render 'product-card', product: product %}
+  TGPCOP NOTES — Premium Ebook Product Card v2
+  Grid: 4-col desktop | 2-col tablet | 1-col mobile
+  Images: object-fit contain, no cropping, fixed height
+  Hover: lift + shadow + scale image
 {% endcomment %}
 
-{% assign card_product = product %}
+{%- assign sem_tag = '' -%}
+{%- assign is_gpat = false -%}
+{%- for tag in product.tags -%}
+  {%- if tag contains 'Sem' or tag contains 'Semester' -%}
+    {%- assign sem_tag = tag -%}
+  {%- endif -%}
+  {%- if tag contains 'GPAT' -%}
+    {%- assign is_gpat = true -%}
+  {%- endif -%}
+{%- endfor -%}
 
-<div class="product-card-wrap" data-type="{{ card_product.type | handleize }}">
-  <article class="product-card">
-    <a href="{{ card_product.url }}" class="product-card-link" aria-label="{{ card_product.title }}">
+<article class="pcard">
 
-      <div class="product-card-image-wrap">
-        {% if card_product.featured_image %}
-          <img
-            src="{{ card_product.featured_image | img_url: '400x300', crop: 'center' }}"
-            alt="{{ card_product.featured_image.alt | default: card_product.title | escape }}"
-            class="product-card-image"
-            loading="lazy"
-            width="400"
-            height="300">
-        {% else %}
-          <div class="product-card-image-placeholder">
-            <span class="placeholder-icon">📚</span>
-            <span>{{ card_product.type | default: 'Study Material' }}</span>
-          </div>
-        {% endif %}
-
-        {% if card_product.compare_at_price > card_product.price %}
-          {% assign savings = card_product.compare_at_price | minus: card_product.price | times: 100 | divided_by: card_product.compare_at_price %}
-          <span class="product-badge product-badge-sale">{{ savings }}% OFF</span>
-        {% elsif card_product.tags contains 'free' %}
-          <span class="product-badge product-badge-free">FREE</span>
-        {% elsif card_product.tags contains 'new' %}
-          <span class="product-badge product-badge-new">NEW</span>
-        {% endif %}
-
-        <div class="product-card-overlay" aria-hidden="true">
-          <span class="product-overlay-text">👁 View Details</span>
-        </div>
+  <!-- ── Image Block ── -->
+  <a href="{{ product.url }}" class="pcard__media" aria-label="{{ product.title | escape }}">
+    {%- if product.featured_image -%}
+      <img
+        src="{{ product.featured_image | image_url: width: 600 }}"
+        alt="{{ product.featured_image.alt | default: product.title | escape }}"
+        class="pcard__img"
+        loading="lazy"
+        width="600"
+        height="320"
+      >
+    {%- else -%}
+      <div class="pcard__no-img">
+        <span class="pcard__no-img-icon">📖</span>
+        <span class="pcard__no-img-text">Cover Coming Soon</span>
       </div>
+    {%- endif -%}
 
-      <div class="product-card-body">
-        <div class="product-card-meta">
-          {% if card_product.type != blank %}
-            <span class="product-meta-tag meta-subject">{{ card_product.type }}</span>
-          {% endif %}
-          {% for tag in card_product.tags limit: 2 %}
-            {% if tag contains 'Sem' %}
-              <span class="product-meta-tag meta-semester">{{ tag }}</span>
-            {% elsif tag contains 'GPAT' %}
-              <span class="product-meta-tag meta-gpat">GPAT</span>
-            {% endif %}
-          {% endfor %}
-        </div>
+    <!-- Badges -->
+    <span class="pcard__badge pcard__badge--pdf">PDF Notes</span>
+    <span class="pcard__badge pcard__badge--dl">
+      ⚡ Instant
+    </span>
 
-        <h3 class="product-card-title">{{ card_product.title }}</h3>
-
-        <div class="product-card-rating" aria-label="4.8 out of 5 stars">
-          <span class="star filled" aria-hidden="true">★</span>
-          <span class="star filled" aria-hidden="true">★</span>
-          <span class="star filled" aria-hidden="true">★</span>
-          <span class="star filled" aria-hidden="true">★</span>
-          <span class="star filled" aria-hidden="true">★</span>
-          <span class="rating-score">4.8</span>
-          <span class="rating-count">(1.2k+)</span>
-        </div>
-
-        <div class="product-card-price">
-          {% if card_product.price == 0 %}
-            <span class="price-current price-free">FREE</span>
-          {% else %}
-            <span class="price-current">₹{{ card_product.price | money_without_currency }}</span>
-          {% endif %}
-          {% if card_product.compare_at_price > card_product.price %}
-            <span class="price-original">₹{{ card_product.compare_at_price | money_without_currency }}</span>
-          {% endif %}
-        </div>
-      </div>
-    </a>
-
-    <div class="product-card-footer">
-      {% form 'product', card_product, class: 'product-card-form', action: '/cart/add' %}
-        <input type="hidden" name="id" value="{{ card_product.variants.first.id }}">
-        <input type="hidden" name="quantity" value="1">
-        <button type="submit" class="btn btn-primary btn-full">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-          Add to Cart
-        </button>
-      {% endform %}
+    <!-- Hover overlay -->
+    <div class="pcard__overlay" aria-hidden="true">
+      <span class="pcard__overlay-btn">View Details →</span>
     </div>
-  </article>
-</div>
+  </a>
+
+  <!-- ── Card Body ── -->
+  <div class="pcard__body">
+
+    <!-- Tag chips -->
+    <div class="pcard__chips">
+      {%- if sem_tag != '' -%}
+        <span class="pcard__chip pcard__chip--sem">{{ sem_tag }}</span>
+      {%- endif -%}
+      {%- if is_gpat -%}
+        <span class="pcard__chip pcard__chip--gpat">GPAT</span>
+      {%- endif -%}
+    </div>
+
+    <!-- Title -->
+    <h3 class="pcard__title">
+      <a href="{{ product.url }}">{{ product.title }}</a>
+    </h3>
+
+    <!-- Rating row (static for trust signal) -->
+    <div class="pcard__rating" aria-label="4.9 stars">
+      <span class="pcard__stars">★★★★★</span>
+      <span class="pcard__rating-score">4.9</span>
+      <span class="pcard__rating-ct">(2.1k+)</span>
+    </div>
+
+    <!-- Price + Cart -->
+    <div class="pcard__footer">
+      <div class="pcard__price-wrap">
+        {%- if product.compare_at_price > product.price -%}
+          <span class="pcard__compare">{{ product.compare_at_price | money }}</span>
+        {%- endif -%}
+        <span class="pcard__price">
+          {%- if product.price == 0 -%}FREE{%- else -%}{{ product.price | money }}{%- endif -%}
+        </span>
+      </div>
+
+      <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+        <input type="hidden" name="quantity" value="1">
+        <input type="hidden" name="return_to" value="back">
+        <button type="submit" class="pcard__btn" title="Add to Cart">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </button>
+      </form>
+    </div>
+
+  </div>
+</article>
+
+<style>
+/* ═══════════════════════════════════════
+   TGPCOP NOTES — Premium Product Card
+   ═══════════════════════════════════════ */
+.pcard {
+  background: #ffffff;
+  border: 1px solid #E4EBF0;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  transition:
+    transform 0.30s cubic-bezier(.22,.68,0,1.2),
+    box-shadow 0.30s ease,
+    border-color 0.30s ease;
+}
+.pcard:hover {
+  transform: translateY(-10px);
+  box-shadow:
+    0 28px 60px rgba(0, 43, 80, 0.13),
+    0 8px 24px rgba(0, 0, 0, 0.07);
+  border-color: rgba(34, 197, 94, 0.35);
+}
+
+/* ── Media / Image ── */
+.pcard__media {
+  display: block;
+  width: 100%;
+  height: 260px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: linear-gradient(145deg, #E8F5EE 0%, #D6EDE0 100%);
+  text-decoration: none;
+}
+.pcard__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 14px;
+  display: block;
+  transition: transform 0.50s cubic-bezier(.4,0,.2,1);
+}
+.pcard:hover .pcard__img {
+  transform: scale(1.06);
+}
+
+/* No-image placeholder */
+.pcard__no-img {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.pcard__no-img-icon { font-size: 48px; opacity: 0.35; }
+.pcard__no-img-text {
+  font-size: 10px;
+  font-weight: 700;
+  color: #0B5D3B;
+  opacity: 0.45;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Badges */
+.pcard__badge {
+  position: absolute;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 100px;
+  z-index: 3;
+  line-height: 1;
+}
+.pcard__badge--pdf {
+  top: 12px;
+  left: 12px;
+  background: #22C55E;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(34,197,94,0.38);
+}
+.pcard__badge--dl {
+  top: 12px;
+  right: 12px;
+  background: rgba(255,255,255,0.92);
+  color: #0B5D3B;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(34,197,94,0.25);
+}
+
+/* Hover overlay */
+.pcard__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 11, 51, 0.52);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.28s ease;
+  z-index: 2;
+}
+.pcard:hover .pcard__overlay { opacity: 1; }
+.pcard__overlay-btn {
+  background: #ffffff;
+  color: #0B1C2C;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 9px 20px;
+  border-radius: 100px;
+  transform: translateY(14px);
+  transition: transform 0.28s ease;
+  pointer-events: none;
+}
+.pcard:hover .pcard__overlay-btn { transform: translateY(0); }
+
+/* ── Body ── */
+.pcard__body {
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 10px;
+}
+
+/* Chips */
+.pcard__chips { display: flex; gap: 6px; flex-wrap: wrap; min-height: 20px; }
+.pcard__chip {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 3px 9px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.pcard__chip--sem { background: #DCFCE7; color: #166534; }
+.pcard__chip--gpat { background: #FEF3C7; color: #92400E; }
+
+/* Title */
+.pcard__title {
+  font-family: 'Poppins', 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0F172A;
+  line-height: 1.50;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.625rem;
+  flex-grow: 1;
+}
+.pcard__title a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s;
+}
+.pcard__title a:hover { color: #22C55E; }
+
+/* Rating */
+.pcard__rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+}
+.pcard__stars { color: #EAB308; font-size: 0.85rem; letter-spacing: 1px; }
+.pcard__rating-score { font-weight: 800; color: #0F172A; }
+.pcard__rating-ct { color: #94A3B8; }
+
+/* Footer */
+.pcard__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #F1F5F9;
+  padding-top: 12px;
+  margin-top: auto;
+  gap: 8px;
+}
+.pcard__price-wrap { display: flex; flex-direction: column; }
+.pcard__compare {
+  font-size: 0.72rem;
+  color: #94A3B8;
+  text-decoration: line-through;
+  margin-bottom: 1px;
+}
+.pcard__price {
+  font-family: 'Poppins', 'Inter', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #22C55E;
+  line-height: 1;
+}
+
+/* Cart button */
+.pcard__btn {
+  background: #22C55E;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background 0.22s ease,
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+  box-shadow: 0 3px 10px rgba(34,197,94,0.30);
+}
+.pcard__btn:hover {
+  background: #16A34A;
+  transform: scale(1.12);
+  box-shadow: 0 6px 20px rgba(34,197,94,0.45);
+}
+.pcard__btn:active { transform: scale(0.94); }
+</style>
