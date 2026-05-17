@@ -1,8 +1,7 @@
 {% comment %}
-  TGPCOP NOTES — Premium Ebook Product Card v2
-  Grid: 4-col desktop | 2-col tablet | 1-col mobile
-  Images: object-fit contain, no cropping, fixed height
-  Hover: lift + shadow + scale image
+  TGPCOP NOTES — Premium Ebook Product Card v3
+  FIXED: AJAX Add to Cart with visual feedback
+  Shipping: Digital product (requiresShipping: false)
 {% endcomment %}
 
 {%- assign sem_tag = '' -%}
@@ -16,7 +15,9 @@
   {%- endif -%}
 {%- endfor -%}
 
-<article class="pcard">
+{%- assign variant_id = product.variants.first.id -%}
+
+<article class="pcard" data-product-id="{{ product.id }}">
 
   <!-- ── Image Block ── -->
   <a href="{{ product.url }}" class="pcard__media" aria-label="{{ product.title | escape }}">
@@ -35,14 +36,8 @@
         <span class="pcard__no-img-text">Cover Coming Soon</span>
       </div>
     {%- endif -%}
-
-    <!-- Badges -->
     <span class="pcard__badge pcard__badge--pdf">PDF Notes</span>
-    <span class="pcard__badge pcard__badge--dl">
-      ⚡ Instant
-    </span>
-
-    <!-- Hover overlay -->
+    <span class="pcard__badge pcard__badge--dl">⚡ Instant</span>
     <div class="pcard__overlay" aria-hidden="true">
       <span class="pcard__overlay-btn">View Details →</span>
     </div>
@@ -51,7 +46,6 @@
   <!-- ── Card Body ── -->
   <div class="pcard__body">
 
-    <!-- Tag chips -->
     <div class="pcard__chips">
       {%- if sem_tag != '' -%}
         <span class="pcard__chip pcard__chip--sem">{{ sem_tag }}</span>
@@ -59,21 +53,19 @@
       {%- if is_gpat -%}
         <span class="pcard__chip pcard__chip--gpat">GPAT</span>
       {%- endif -%}
+      <span class="pcard__chip pcard__chip--dig">📱 Digital</span>
     </div>
 
-    <!-- Title -->
     <h3 class="pcard__title">
       <a href="{{ product.url }}">{{ product.title }}</a>
     </h3>
 
-    <!-- Rating row (static for trust signal) -->
     <div class="pcard__rating" aria-label="4.9 stars">
       <span class="pcard__stars">★★★★★</span>
       <span class="pcard__rating-score">4.9</span>
       <span class="pcard__rating-ct">(2.1k+)</span>
     </div>
 
-    <!-- Price + Cart -->
     <div class="pcard__footer">
       <div class="pcard__price-wrap">
         {%- if product.compare_at_price > product.price -%}
@@ -84,23 +76,35 @@
         </span>
       </div>
 
-      <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="id" value="{{ product.variants.first.id }}">
-        <input type="hidden" name="quantity" value="1">
-        <input type="hidden" name="return_to" value="back">
-        <button type="submit" class="pcard__btn" title="Add to Cart">
+      <!-- AJAX Add to Cart Button -->
+      <button
+        class="pcard__btn"
+        data-variant-id="{{ variant_id }}"
+        data-product-title="{{ product.title | escape }}"
+        onclick="tgpAddToCart(this)"
+        aria-label="Add {{ product.title | escape }} to cart"
+        type="button"
+      >
+        <span class="pcard__btn-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        </button>
-      </form>
+        </span>
+        <span class="pcard__btn-loading" style="display:none;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.3)" stroke-width="2.5"/><path d="M12 2a10 10 0 0 1 10 10" stroke="white" stroke-width="2.5" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="0.7s" repeatCount="indefinite"/></path></svg>
+        </span>
+        <span class="pcard__btn-done" style="display:none;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+      </button>
     </div>
 
   </div>
 </article>
 
+<!-- Toast notification (only rendered once via deduplication) -->
+<div id="tgp-toast" class="tgp-toast" aria-live="polite" role="status"></div>
+
 <style>
-/* ═══════════════════════════════════════
-   TGPCOP NOTES — Premium Product Card
-   ═══════════════════════════════════════ */
+/* ══ TGPCOP Product Card v3 ══ */
 .pcard {
   background: #ffffff;
   border: 1px solid #E4EBF0;
@@ -117,13 +121,11 @@
 }
 .pcard:hover {
   transform: translateY(-10px);
-  box-shadow:
-    0 28px 60px rgba(0, 43, 80, 0.13),
-    0 8px 24px rgba(0, 0, 0, 0.07);
-  border-color: rgba(34, 197, 94, 0.35);
+  box-shadow: 0 28px 60px rgba(0,43,80,0.13), 0 8px 24px rgba(0,0,0,0.07);
+  border-color: rgba(34,197,94,0.35);
 }
 
-/* ── Media / Image ── */
+/* Image */
 .pcard__media {
   display: block;
   width: 100%;
@@ -131,7 +133,7 @@
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
-  background: linear-gradient(145deg, #E8F5EE 0%, #D6EDE0 100%);
+  background: linear-gradient(145deg,#E8F5EE 0%,#D6EDE0 100%);
   text-decoration: none;
 }
 .pcard__img {
@@ -142,182 +144,118 @@
   display: block;
   transition: transform 0.50s cubic-bezier(.4,0,.2,1);
 }
-.pcard:hover .pcard__img {
-  transform: scale(1.06);
-}
+.pcard:hover .pcard__img { transform: scale(1.06); }
 
-/* No-image placeholder */
+/* No-image */
 .pcard__no-img {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 10px;
 }
 .pcard__no-img-icon { font-size: 48px; opacity: 0.35; }
 .pcard__no-img-text {
-  font-size: 10px;
-  font-weight: 700;
-  color: #0B5D3B;
-  opacity: 0.45;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-size: 10px; font-weight: 700; color: #0B5D3B;
+  opacity: 0.45; text-transform: uppercase; letter-spacing: 0.08em;
 }
 
 /* Badges */
 .pcard__badge {
   position: absolute;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 100px;
-  z-index: 3;
-  line-height: 1;
+  font-size: 9px; font-weight: 800;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 100px;
+  z-index: 3; line-height: 1;
 }
 .pcard__badge--pdf {
-  top: 12px;
-  left: 12px;
-  background: #22C55E;
-  color: #fff;
+  top: 12px; left: 12px;
+  background: #22C55E; color: #fff;
   box-shadow: 0 2px 8px rgba(34,197,94,0.38);
 }
 .pcard__badge--dl {
-  top: 12px;
-  right: 12px;
-  background: rgba(255,255,255,0.92);
-  color: #0B5D3B;
+  top: 12px; right: 12px;
+  background: rgba(255,255,255,0.92); color: #0B5D3B;
   backdrop-filter: blur(6px);
   border: 1px solid rgba(34,197,94,0.25);
 }
 
 /* Hover overlay */
 .pcard__overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 11, 51, 0.52);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.28s ease;
-  z-index: 2;
+  position: absolute; inset: 0;
+  background: rgba(0,11,51,0.52);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.28s ease; z-index: 2;
 }
 .pcard:hover .pcard__overlay { opacity: 1; }
 .pcard__overlay-btn {
-  background: #ffffff;
-  color: #0B1C2C;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 700;
-  font-size: 0.82rem;
-  padding: 9px 20px;
-  border-radius: 100px;
-  transform: translateY(14px);
-  transition: transform 0.28s ease;
+  background: #fff; color: #0B1C2C;
+  font-weight: 700; font-size: 0.82rem;
+  padding: 9px 20px; border-radius: 100px;
+  transform: translateY(14px); transition: transform 0.28s ease;
   pointer-events: none;
 }
 .pcard:hover .pcard__overlay-btn { transform: translateY(0); }
 
-/* ── Body ── */
+/* Body */
 .pcard__body {
   padding: 16px 18px 18px;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  gap: 10px;
+  display: flex; flex-direction: column;
+  flex-grow: 1; gap: 10px;
 }
 
 /* Chips */
 .pcard__chips { display: flex; gap: 6px; flex-wrap: wrap; min-height: 20px; }
 .pcard__chip {
-  font-size: 9px;
-  font-weight: 800;
-  padding: 3px 9px;
-  border-radius: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: 9px; font-weight: 800;
+  padding: 3px 9px; border-radius: 6px;
+  text-transform: uppercase; letter-spacing: 0.06em;
 }
 .pcard__chip--sem { background: #DCFCE7; color: #166534; }
 .pcard__chip--gpat { background: #FEF3C7; color: #92400E; }
+.pcard__chip--dig { background: #EFF6FF; color: #1D4ED8; }
 
 /* Title */
 .pcard__title {
-  font-family: 'Poppins', 'Inter', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: #0F172A;
-  line-height: 1.50;
+  font-family: 'Poppins','Inter',sans-serif;
+  font-size: 0.875rem; font-weight: 700;
+  color: #0F172A; line-height: 1.50;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  min-height: 2.625rem;
-  flex-grow: 1;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; min-height: 2.625rem; flex-grow: 1;
 }
-.pcard__title a {
-  text-decoration: none;
-  color: inherit;
-  transition: color 0.2s;
-}
+.pcard__title a { text-decoration: none; color: inherit; transition: color 0.2s; }
 .pcard__title a:hover { color: #22C55E; }
 
 /* Rating */
-.pcard__rating {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.78rem;
-}
+.pcard__rating { display: flex; align-items: center; gap: 4px; font-size: 0.78rem; }
 .pcard__stars { color: #EAB308; font-size: 0.85rem; letter-spacing: 1px; }
 .pcard__rating-score { font-weight: 800; color: #0F172A; }
 .pcard__rating-ct { color: #94A3B8; }
 
 /* Footer */
 .pcard__footer {
-  display: flex;
-  align-items: center;
+  display: flex; align-items: center;
   justify-content: space-between;
   border-top: 1px solid #F1F5F9;
-  padding-top: 12px;
-  margin-top: auto;
-  gap: 8px;
+  padding-top: 12px; margin-top: auto; gap: 8px;
 }
 .pcard__price-wrap { display: flex; flex-direction: column; }
-.pcard__compare {
-  font-size: 0.72rem;
-  color: #94A3B8;
-  text-decoration: line-through;
-  margin-bottom: 1px;
-}
+.pcard__compare { font-size: 0.72rem; color: #94A3B8; text-decoration: line-through; margin-bottom: 1px; }
 .pcard__price {
-  font-family: 'Poppins', 'Inter', sans-serif;
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: #22C55E;
-  line-height: 1;
+  font-family: 'Poppins','Inter',sans-serif;
+  font-size: 1.35rem; font-weight: 800;
+  color: #22C55E; line-height: 1;
 }
 
-/* Cart button */
+/* Cart button — 3 states: idle / loading / done */
 .pcard__btn {
-  background: #22C55E;
-  color: #ffffff;
-  border: none;
-  border-radius: 12px;
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition:
-    background 0.22s ease,
-    transform 0.22s ease,
-    box-shadow 0.22s ease;
+  background: #22C55E; color: #fff;
+  border: none; border-radius: 12px;
+  width: 46px; height: 46px; min-width: 46px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; position: relative;
+  transition: background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
   box-shadow: 0 3px 10px rgba(34,197,94,0.30);
+  outline: none;
 }
 .pcard__btn:hover {
   background: #16A34A;
@@ -325,4 +263,152 @@
   box-shadow: 0 6px 20px rgba(34,197,94,0.45);
 }
 .pcard__btn:active { transform: scale(0.94); }
+.pcard__btn:disabled {
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.8;
+}
+.pcard__btn--loading { background: #16A34A; }
+.pcard__btn--done { background: #0B5D3B; }
+
+/* Toast */
+.tgp-toast {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  background: #0B1C2C;
+  color: #fff;
+  padding: 14px 22px;
+  border-radius: 16px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.22);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 9999;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(.22,.68,0,1.2), opacity 0.35s ease;
+  pointer-events: none;
+  max-width: 340px;
+}
+.tgp-toast.tgp-toast--show {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.tgp-toast__icon { font-size: 1.2rem; flex-shrink: 0; }
+.tgp-toast__text { flex: 1; }
+.tgp-toast__title { font-weight: 700; font-size: 0.875rem; color: #22C55E; }
+.tgp-toast__sub { font-size: 0.78rem; color: #94A3B8; margin-top: 2px; }
+.tgp-toast__cart {
+  background: #22C55E; color: #fff;
+  padding: 6px 14px; border-radius: 8px;
+  font-size: 0.78rem; font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+.tgp-toast__cart:hover { background: #16A34A; color: #fff; }
+
+@media (max-width: 480px) {
+  .tgp-toast { bottom: 80px; right: 16px; left: 16px; max-width: unset; }
+}
 </style>
+
+<script>
+(function() {
+  // Only initialise once across all card renders
+  if (window.__tgpCartInit) return;
+  window.__tgpCartInit = true;
+
+  // Ensure toast element exists (might be duplicated in DOM from multiple cards)
+  // We'll use the first one and remove extras
+  document.addEventListener('DOMContentLoaded', function() {
+    var toasts = document.querySelectorAll('#tgp-toast');
+    toasts.forEach(function(t, i) { if (i > 0) t.remove(); });
+  });
+
+  window.tgpAddToCart = function(btn) {
+    var variantId = btn.getAttribute('data-variant-id');
+    var productTitle = btn.getAttribute('data-product-title');
+    if (!variantId) return;
+
+    // UI: loading state
+    btn.disabled = true;
+    btn.classList.add('pcard__btn--loading');
+    btn.querySelector('.pcard__btn-icon').style.display = 'none';
+    btn.querySelector('.pcard__btn-loading').style.display = 'flex';
+    btn.querySelector('.pcard__btn-done').style.display = 'none';
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+      body: JSON.stringify({ id: variantId, quantity: 1 })
+    })
+    .then(function(res) {
+      if (!res.ok) throw new Error('Cart error ' + res.status);
+      return res.json();
+    })
+    .then(function() {
+      // Success state
+      btn.classList.remove('pcard__btn--loading');
+      btn.classList.add('pcard__btn--done');
+      btn.querySelector('.pcard__btn-loading').style.display = 'none';
+      btn.querySelector('.pcard__btn-done').style.display = 'flex';
+
+      // Update cart count in header if element exists
+      fetch('/cart.js')
+        .then(function(r) { return r.json(); })
+        .then(function(cart) {
+          var badges = document.querySelectorAll('.cart-badge, .cart-count, [data-cart-count], .header-cart-count');
+          badges.forEach(function(el) { el.textContent = cart.item_count; el.style.display = cart.item_count > 0 ? 'flex' : 'none'; });
+        }).catch(function() {});
+
+      // Show toast
+      tgpShowToast(productTitle);
+
+      // Reset button after 2.5s
+      setTimeout(function() {
+        btn.disabled = false;
+        btn.classList.remove('pcard__btn--done');
+        btn.querySelector('.pcard__btn-icon').style.display = 'flex';
+        btn.querySelector('.pcard__btn-done').style.display = 'none';
+      }, 2500);
+    })
+    .catch(function(err) {
+      console.error('TGP Cart Error:', err);
+      // Reset on error
+      btn.disabled = false;
+      btn.classList.remove('pcard__btn--loading');
+      btn.querySelector('.pcard__btn-icon').style.display = 'flex';
+      btn.querySelector('.pcard__btn-loading').style.display = 'none';
+      tgpShowToast(null, true);
+    });
+  };
+
+  window.tgpShowToast = function(title, isError) {
+    var toast = document.querySelector('#tgp-toast');
+    if (!toast) return;
+
+    if (isError) {
+      toast.innerHTML = '<span class="tgp-toast__icon">⚠️</span><div class="tgp-toast__text"><div class="tgp-toast__title" style="color:#ef4444;">Could not add to cart</div><div class="tgp-toast__sub">Please try again or open product page.</div></div>';
+    } else {
+      toast.innerHTML =
+        '<span class="tgp-toast__icon">✅</span>' +
+        '<div class="tgp-toast__text">' +
+          '<div class="tgp-toast__title">Added to Cart!</div>' +
+          '<div class="tgp-toast__sub">' + (title || 'Product') + '</div>' +
+        '</div>' +
+        '<a href="/cart" class="tgp-toast__cart">View Cart →</a>';
+    }
+
+    toast.classList.add('tgp-toast--show');
+    clearTimeout(window.__tgpToastTimer);
+    window.__tgpToastTimer = setTimeout(function() {
+      toast.classList.remove('tgp-toast--show');
+    }, 3800);
+  };
+})();
+</script>
